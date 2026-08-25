@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ITIL 4 CDS 模擬試験 : EXAM CDS1 (音声学習対応版)</title>
+    <title>ITIL 4 CDS 模擬試験 : EXAM CDS1 (全機能統合版)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .slide-up { animation: slideUp 0.3s ease-out forwards; }
@@ -17,18 +17,29 @@
 
     <div id="app" class="bg-white rounded-2xl shadow-xl w-full max-w-4xl overflow-hidden border border-slate-200 flex flex-col">
         <!-- Header -->
-        <div class="bg-indigo-700 text-white px-6 py-5 flex flex-col md:flex-row justify-between items-start md:items-center shadow-md gap-4">
+        <div class="bg-indigo-700 text-white px-4 md:px-6 py-4 flex flex-col md:flex-row justify-between items-start md:items-center shadow-md gap-4">
             <div>
                 <span class="text-xs font-semibold tracking-wider uppercase text-indigo-200 block">ITIL 4 Specialist</span>
                 <h1 class="text-lg md:text-xl font-bold">CDS 模擬試験 : EXAM CDS1</h1>
             </div>
-            <div class="flex items-center gap-3 w-full md:w-auto">
-                <span id="progress-text" class="text-sm font-semibold bg-indigo-800/80 px-3 py-1.5 rounded-full border border-indigo-400/30 whitespace-nowrap">1 / 52</span>
-                <!-- 音声コントロールボタン -->
-                <button id="play-audio-btn" class="flex-1 md:flex-none bg-emerald-500 hover:bg-emerald-400 text-white text-sm font-bold py-1.5 px-3 rounded-full shadow transition flex items-center justify-center gap-1">
+            
+            <!-- コントロールパネル (問題ジャンプ ＆ 音声再生) -->
+            <div class="flex items-center gap-2 w-full md:w-auto overflow-x-auto pb-1 md:pb-0">
+                <!-- 任意の問題番号から開始する機能 -->
+                <div class="flex items-center bg-indigo-800/80 rounded-lg border border-indigo-400/30 px-2 py-1">
+                    <span class="text-xs font-semibold mr-2 whitespace-nowrap text-indigo-100">ジャンプ:</span>
+                    <select id="question-selector" class="bg-indigo-900 text-white text-sm rounded px-1 py-1 focus:outline-none focus:ring-2 focus:ring-emerald-400 cursor-pointer">
+                        <!-- JSでオプションを動的に生成します -->
+                    </select>
+                </div>
+
+                <span id="progress-text" class="hidden sm:inline text-sm font-semibold bg-indigo-800/80 px-3 py-1.5 rounded-full border border-indigo-400/30 whitespace-nowrap"></span>
+                
+                <!-- 音声学習機能 -->
+                <button id="play-audio-btn" class="flex-1 md:flex-none bg-emerald-500 hover:bg-emerald-400 text-white text-sm font-bold py-1.5 px-3 rounded-full shadow transition flex items-center justify-center gap-1 whitespace-nowrap ml-auto">
                     <span>▶️ 音声学習</span>
                 </button>
-                <button id="stop-audio-btn" class="hidden flex-1 md:flex-none bg-rose-500 hover:bg-rose-400 text-white text-sm font-bold py-1.5 px-3 rounded-full shadow transition flex items-center justify-center gap-1">
+                <button id="stop-audio-btn" class="hidden flex-1 md:flex-none bg-rose-500 hover:bg-rose-400 text-white text-sm font-bold py-1.5 px-3 rounded-full shadow transition flex items-center justify-center gap-1 whitespace-nowrap ml-auto">
                     <span>⏹️ 停止</span>
                 </button>
             </div>
@@ -36,7 +47,7 @@
         
         <!-- Progress Bar -->
         <div class="w-full bg-slate-200 h-2">
-            <div id="progress-bar" class="bg-emerald-500 h-2 transition-all duration-300" style="width: 2%;"></div>
+            <div id="progress-bar" class="bg-emerald-500 h-2 transition-all duration-300" style="width: 0%;"></div>
         </div>
 
         <!-- 音声再生中のステータス表示 -->
@@ -68,6 +79,9 @@
             <!-- Navigation Buttons -->
             <div class="mt-8 pt-5 border-t border-slate-200 flex flex-col-reverse sm:flex-row justify-between items-center gap-4">
                 <button id="prev-btn" class="hidden text-slate-500 hover:text-indigo-600 font-bold py-2 px-4 rounded transition flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                    </svg>
                     前の問題に戻る
                 </button>
                 <button id="next-btn" class="hidden w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-bold py-2.5 px-8 rounded-lg shadow transition duration-150 ml-auto">
@@ -83,14 +97,13 @@
             <p class="text-slate-600 mb-6">全52問の回答と解説の確認が完了しました。</p>
             <div class="bg-slate-50 p-6 rounded-xl max-w-xs mx-auto border border-slate-200 mb-8">
                 <div class="text-xs text-slate-500 font-medium uppercase tracking-wider mb-1">正答率</div>
-                <div class="text-4xl font-extrabold text-indigo-600"><span id="score"></span> <span class="text-xl text-slate-400 font-normal">/ 52</span></div>
+                <div class="text-4xl font-extrabold text-indigo-600"><span id="score"></span> <span id="total-score" class="text-xl text-slate-400 font-normal"></span></div>
             </div>
             <button onclick="location.reload()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition text-sm">もう一度挑戦する</button>
         </div>
     </div>
 
     <script>
-        // CDS1の問題データ（中身は省略せずに保持しています）
         const questions = [
             {
                 question: "組織は、サービスをサポートするためにプロセスベースのアプローチから価値ベースのアプローチへ移行しようとしている。これらの活動のうち、彼らが【最初】に行うべきものはどれか。",
@@ -674,7 +687,7 @@
                 ],
                 answer: 3,
                 syllabus: "第5章：作業の優先順位付けと管理（5.1.4 スウォーミングの形態）",
-                rationale: "これは「ドロップイン・スウォーム」の例であり、専門家は継続的に利用できるようにされるか、または関与するかどうか、またいつ関与するかを決定するために他のチームの活動を継続的に監視（またはツールから通知を受信）して柔軟に群れ（スウォーム）に合流します。",
+                rationale: "これは「ドロップイン・スウォーム」の例であり、専門家は継続的に利用できるようにされるか、または関与するかどうか、またいつ関関与するかを決定するために他のチームの活動を継続的に監視（またはツールから通知を受信）して柔軟に群れ（スウォーム）に合流します。",
                 tips: "専門家がリアルタイムに集まって協力解決する仕組みは「スウォーミング」です。"
             },
             {
@@ -774,7 +787,6 @@
         let score = 0;
         let userAnswers = new Array(questions.length).fill(null);
         
-        // --- 音声再生用の変数 ---
         let isPlaying = false;
         let utterance = new SpeechSynthesisUtterance();
         utterance.lang = 'ja-JP';
@@ -791,10 +803,24 @@
         const resultContainer = document.getElementById('result-container');
         const qBadge = document.getElementById('question-badge');
         
-        // 音声UIの要素
         const playBtn = document.getElementById('play-audio-btn');
         const stopBtn = document.getElementById('stop-audio-btn');
         const audioStatus = document.getElementById('audio-status');
+        const questionSelector = document.getElementById('question-selector');
+
+        questions.forEach((_, index) => {
+            const option = document.createElement('option');
+            option.value = index;
+            option.text = `問 ${index + 1}`;
+            questionSelector.appendChild(option);
+        });
+
+        questionSelector.addEventListener('change', (e) => {
+            if (isPlaying) stopAudio();
+            currentQuestion = parseInt(e.target.value, 10);
+            loadQuestion();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
 
         function loadQuestion() {
             const q = questions[currentQuestion];
@@ -803,6 +829,8 @@
             
             progText.innerText = `${currentQuestion + 1} / ${questions.length}`;
             progBar.style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
+            
+            questionSelector.value = currentQuestion;
 
             if (currentQuestion === 0) {
                 prevBtn.classList.add('hidden');
@@ -822,7 +850,6 @@
                     btn.className = 'w-full text-left p-4 rounded-xl border-2 border-slate-200 hover:border-indigo-400 focus:outline-none transition-all duration-150 bg-white font-medium text-slate-700 shadow-sm hover:bg-slate-50 flex items-start gap-3';
                     btn.innerHTML = `<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-slate-100 text-slate-600 text-xs font-bold shrink-0 mt-0.5">${String.fromCharCode(65 + index)}</span> <span>${opt}</span>`;
                     btn.onclick = () => {
-                        // もし音声再生中なら、手動解答した時点で音声を止める
                         if (isPlaying) stopAudio();
                         selectOption(index, btn);
                     };
@@ -880,7 +907,6 @@
                 nextBtn.innerText = "次の問題へ進む";
             }
 
-            // 音声再生中でなければスクロールする
             if(!isPlaying) {
                 setTimeout(() => {
                     expBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -903,16 +929,13 @@
 
         prevBtn.onclick = () => {
             if (currentQuestion > 0) {
+                if (isPlaying) stopAudio();
                 currentQuestion--;
                 loadQuestion();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         };
 
-        // ==========================================
-        // 音声自動再生（リスニングモード）のロジック
-        // ==========================================
-        
         playBtn.onclick = () => {
             if (isPlaying) return;
             isPlaying = true;
@@ -920,9 +943,8 @@
             stopBtn.classList.remove('hidden');
             audioStatus.classList.remove('hidden');
             
-            // 未解答の場合は、正解状態を強制表示してから読み上げる
             if (userAnswers[currentQuestion] === null) {
-                 selectOption(questions[currentQuestion].answer); // 正解を選択したことにして表示
+                 selectOption(questions[currentQuestion].answer); 
             }
             readCurrentQuestion();
         };
@@ -940,14 +962,11 @@
         function readCurrentQuestion() {
             if (!isPlaying) return;
             
-            // 読み上げ前にキャンセルをかけて初期化
             window.speechSynthesis.cancel();
-
             const q = questions[currentQuestion];
             
-            // 読み上げるテキストを構築（聞きやすいように「、」や「。」で間をとる）
             let textToRead = `第${currentQuestion + 1}問。問題。。。${q.question}。。。。`;
-            textToRead += `正解は。。。${q.options[q.answer].replace(/\(.*?\)/g, '')}。。。。`; // 英語のカッコ書きなどは読まないように少し整形
+            textToRead += `正解は。。。${q.options[q.answer].replace(/\(.*?\)/g, '')}。。。。`; 
             textToRead += `解説。。。${q.rationale}。。。。`;
             textToRead += `試験対策のポイント。。。${q.tips}`;
             
@@ -955,16 +974,13 @@
             
             utterance.onend = () => {
                 if (isPlaying) {
-                    // 次の問題へ
                     if (currentQuestion < questions.length - 1) {
                         currentQuestion++;
                         loadQuestion();
-                        // 次の問題も自動的に正解表示にする
                         if (userAnswers[currentQuestion] === null) {
                              selectOption(questions[currentQuestion].answer); 
                         }
                         window.scrollTo({ top: 0, behavior: 'smooth' });
-                        // 1.5秒空けてから次の問題を読み上げ
                         setTimeout(readCurrentQuestion, 1500); 
                     } else {
                         stopAudio();
@@ -975,15 +991,12 @@
             
             utterance.onerror = (e) => {
                 console.error("音声読み上げエラー", e);
-                // エラー時でも停止ボタンが押されていなければ次へ進むなどの処理が可能ですが、
-                // 安全のため一旦停止
                 if(isPlaying) stopAudio();
             };
             
             window.speechSynthesis.speak(utterance);
         }
 
-        // 初期化
         loadQuestion();
     </script>
 </body>
