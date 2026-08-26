@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ITIL 4 CDS 模擬試験 : EXAM CDS6 (公式シラバス完全解説版)</title>
+    <title>ITIL 4 CDS 模擬試験 : EXAM CDS6 (完全機能版)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .slide-up { animation: slideUp 0.3s ease-out forwards; }
@@ -17,22 +17,42 @@
 
     <div id="app" class="bg-white rounded-2xl shadow-xl w-full max-w-4xl overflow-hidden border border-slate-200 flex flex-col">
         <!-- Header -->
-        <div class="bg-indigo-700 text-white px-6 py-5 flex justify-between items-center shadow-md">
+        <div class="bg-indigo-700 text-white px-4 md:px-6 py-4 flex flex-col md:flex-row justify-between items-start md:items-center shadow-md gap-4">
             <div>
                 <span class="text-xs font-semibold tracking-wider uppercase text-indigo-200 block">ITIL 4 Specialist</span>
                 <h1 class="text-lg md:text-xl font-bold">CDS 模擬試験 : EXAM CDS6</h1>
             </div>
-            <div class="text-right">
-                <span id="progress-text" class="text-sm font-semibold bg-indigo-800/80 px-3 py-1.5 rounded-full border border-indigo-400/30">1 / 52</span>
+            
+            <div class="flex items-center gap-2 w-full md:w-auto overflow-x-auto pb-1 md:pb-0">
+                <div class="flex items-center bg-indigo-800/80 rounded-lg border border-indigo-400/30 px-2 py-1">
+                    <span class="text-xs font-semibold mr-2 whitespace-nowrap text-indigo-100">ジャンプ:</span>
+                    <select id="question-selector" class="bg-indigo-900 text-white text-sm rounded px-1 py-1 focus:outline-none focus:ring-2 focus:ring-emerald-400 cursor-pointer">
+                    </select>
+                </div>
+
+                <span id="progress-text" class="hidden sm:inline text-sm font-semibold bg-indigo-800/80 px-3 py-1.5 rounded-full border border-indigo-400/30 whitespace-nowrap"></span>
+                
+                <button id="shuffle-btn" class="flex-1 md:flex-none bg-amber-500 hover:bg-amber-400 text-white text-sm font-bold py-1.5 px-3 rounded-full shadow transition flex items-center justify-center gap-1 whitespace-nowrap ml-auto">
+                    <span>🔀 ランダム</span>
+                </button>
+                
+                <button id="play-audio-btn" class="flex-1 md:flex-none bg-emerald-500 hover:bg-emerald-400 text-white text-sm font-bold py-1.5 px-3 rounded-full shadow transition flex items-center justify-center gap-1 whitespace-nowrap ml-auto">
+                    <span>▶️ 音声学習</span>
+                </button>
+                <button id="stop-audio-btn" class="hidden flex-1 md:flex-none bg-rose-500 hover:bg-rose-400 text-white text-sm font-bold py-1.5 px-3 rounded-full shadow transition flex items-center justify-center gap-1 whitespace-nowrap ml-auto">
+                    <span>⏹️ 停止</span>
+                </button>
             </div>
         </div>
         
-        <!-- Progress Bar -->
         <div class="w-full bg-slate-200 h-2">
-            <div id="progress-bar" class="bg-emerald-500 h-2 transition-all duration-300" style="width: 2%;"></div>
+            <div id="progress-bar" class="bg-emerald-500 h-2 transition-all duration-300" style="width: 0%;"></div>
         </div>
 
-        <!-- Question Area -->
+        <div id="audio-status" class="hidden bg-emerald-50 text-emerald-800 text-sm font-bold px-4 py-2 border-b border-emerald-200 text-center animate-pulse">
+            🔊 現在、自動音声読み上げモードで再生中です...
+        </div>
+
         <div id="quiz-container" class="p-6 md:p-8 flex-1">
             <div class="flex items-center gap-2 mb-3">
                 <span id="question-badge" class="bg-indigo-100 text-indigo-800 text-xs font-bold px-2.5 py-1 rounded">問題</span>
@@ -40,50 +60,74 @@
             <h2 id="question-text" class="text-base md:text-lg font-semibold mb-6 leading-relaxed text-slate-900"></h2>
             
             <div id="options-container" class="space-y-3">
-                <!-- Options will be injected here -->
             </div>
 
-            <!-- Enhanced Explanation Area -->
             <div id="explanation-box" class="hidden mt-8 p-5 md:p-6 bg-slate-50 border-l-4 border-indigo-600 rounded-r-xl border border-slate-200 slide-up shadow-sm">
                 <div class="flex items-center gap-2 mb-3">
                     <span class="bg-indigo-600 text-white text-xs font-bold px-2 py-0.5 rounded">シラバス準拠 解説</span>
                 </div>
                 <div id="explanation-content" class="text-sm leading-relaxed text-slate-700 space-y-3">
-                    <!-- Dynamic explanation blocks -->
                 </div>
-                <div class="mt-6 pt-4 border-t border-slate-200 flex justify-end">
-                    <button id="next-btn" class="bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-bold py-2.5 px-8 rounded-lg shadow transition duration-150">次の問題へ進む</button>
-                </div>
+            </div>
+
+            <div class="mt-8 pt-5 border-t border-slate-200 flex flex-col-reverse sm:flex-row justify-between items-center gap-4">
+                <button id="prev-btn" class="hidden text-slate-500 hover:text-indigo-600 font-bold py-2 px-4 rounded transition flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                    </svg>
+                    前の問題に戻る
+                </button>
+                <button id="next-btn" class="hidden w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-bold py-2.5 px-8 rounded-lg shadow transition duration-150 ml-auto">
+                    次の問題へ進む
+                </button>
             </div>
         </div>
         
-        <!-- Result Screen -->
         <div id="result-container" class="hidden p-8 md:p-12 text-center my-auto">
             <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold">✓</div>
             <h2 class="text-2xl md:text-3xl font-bold text-slate-900 mb-2">演習完了</h2>
             <p class="text-slate-600 mb-6">全52問の回答と解説の確認が完了しました。</p>
             <div class="bg-slate-50 p-6 rounded-xl max-w-xs mx-auto border border-slate-200 mb-8">
                 <div class="text-xs text-slate-500 font-medium uppercase tracking-wider mb-1">正答率</div>
-                <div class="text-4xl font-extrabold text-indigo-600"><span id="score"></span> <span class="text-xl text-slate-400 font-normal">/ 52</span></div>
+                <div class="text-4xl font-extrabold text-indigo-600"><span id="score"></span> <span id="total-score" class="text-xl text-slate-400 font-normal">/ 52</span></div>
             </div>
-            <button onclick="location.reload()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition text-sm">もう一度挑戦する</button>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button onclick="location.reload()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition text-sm">もう一度挑戦する</button>
+                <button id="result-shuffle-btn" class="bg-amber-500 hover:bg-amber-400 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition text-sm">ランダム出題で再開</button>
+            </div>
+        </div>
+
+        <div id="shuffle-modal" class="hidden fixed inset-0 bg-slate-900/50 flex items-center justify-center z-50 px-4">
+            <div class="bg-white rounded-2xl shadow-2xl p-6 md:p-8 max-w-md w-full slide-up">
+                <h3 class="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2">
+                    <span class="text-amber-500 text-2xl">🔀</span> 問題をシャッフルしますか？
+                </h3>
+                <p class="text-slate-600 text-sm mb-6 leading-relaxed">
+                    ランダム出題モードをオンにして、問1からやり直します。<br>
+                    ※ 現在のスコアと解答履歴はリセットされます。
+                </p>
+                <div class="flex justify-end gap-3">
+                    <button id="modal-cancel-btn" class="px-5 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100 transition">キャンセル</button>
+                    <button id="modal-confirm-btn" class="px-5 py-2.5 rounded-lg text-sm font-bold text-white bg-amber-500 hover:bg-amber-600 shadow-md transition">シャッフルして開始</button>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        const questions = [
+        const originalQuestions = [
             {
                 question: "従業員が、自分のコメントが反映されること、そして将来のフィードバックが妨げられないことを確実にするために重要なのはどれか。",
                 options: [
                     "従業員満足度調査",
-                    "行動への呼びかけ（Call to action）",
+                    "行動への呼びかけ",
                     "サポートと理解",
                     "機密性"
                 ],
                 answer: 1,
                 syllabus: "第2章：従業員満足度管理（2.2.4 フィードバックの収集）",
                 rationale: "従業員からのフィードバックを収集する際、その意見が実際に「行動（Action）」に移されたり、採用されない場合はその理由が説明されたりすること（行動への呼びかけ）が不可欠です。意見が無視されたと感じると、将来のフィードバックの提供を思いとどまらせてしまいます。",
-                tips: "フィードバックに対する応答として「目に見える行動・対応（Call to action）」を示すことが継続的なフィードバックの鍵です。"
+                tips: "フィードバックに対する応答として「目に見える行動・対応」を示すことが継続的なフィードバックの鍵です。"
             },
             {
                 question: "統合プロジェクトにおける「インクリメンタル・デリバリー（段階的提供）」アプローチの潜在的な欠点は何か。",
@@ -104,12 +148,12 @@
                     "コミュニケーション・ウォール",
                     "トピックベースのフォーラムとフォルダ",
                     "セルフヘルプ",
-                    "イベント・アンケート (Event surveys)"
+                    "イベント・アンケート"
                 ],
                 answer: 3,
                 syllabus: "第3章：コラボレーションとワークフロー（3.3.2 顧客とのやり取りにおけるツール）",
                 rationale: "インシデント解決直後などに、サポートソフトウェアから自動で送られる「イベント・アンケート」は、瞬時の顧客フィードバック（CSATなど）を収集するための代表的な機能です。",
-                tips: "「瞬時のフィードバック（instantaneous feedback）」＝イベント終了直後の「イベント・アンケート」です。"
+                tips: "「瞬時のフィードバック」＝イベント終了直後の「イベント・アンケート」です。"
             },
             {
                 question: "サービスを更新するバリューストリームの「計画（Plan）」ステップにおいて、サービス財務管理プラクティスの主な貢献は何か。",
@@ -122,7 +166,7 @@
                 answer: 3,
                 syllabus: "第4章：新しいサービスの作成バリューストリーム（プラクティスの貢献）",
                 rationale: "サービス財務管理（Service Financial Management）プラクティスは、提案されている変更や新しいイニシアチブに関連する「コストの承認」を主に担当します。予算と制約の範囲内に収まっているかを確実にするために重要です。",
-                tips: "「財務管理」の役割は常に「コストの評価・承認（Approving the costs）」に直結します。"
+                tips: "「財務管理」の役割は常に「コストの評価・承認」に直結します。"
             },
             {
                 question: "サービスを更新するバリューストリームの「デザインおよびトランジション」ステップにおいて、インフラストラクチャおよびプラットフォーム管理プラクティスの主な貢献は何か。",
@@ -174,7 +218,7 @@
                 answer: 3,
                 syllabus: "第5章：作業の優先順位付けと管理（5.1.1 デジタルチケットの目的）",
                 rationale: "物理的な紙のチケットからデジタルチケットシステムへの移行の主な目的は、異なる部門や担当者間で情報の受け渡し（データの送信）を「より簡単かつ瞬時（リアルタイム）」に行えるようにし、プロセスの効率を高めることでした。",
-                tips: "デジタル化の最大の恩恵は「データ伝達の瞬時性・容易性（easier and instantaneous data transmission）」です。"
+                tips: "デジタル化の最大の恩恵は「データ伝達の瞬時性・容易性」です。"
             },
             {
                 question: "キュー（待ち行列）を減らすためのいくつかの方法がある。リストされている方法のうち、該当し【ない】ものはどれか。",
@@ -200,7 +244,7 @@
                 answer: 2,
                 syllabus: "第3章：情報と技術（3.2.1 データアナリティクス）",
                 rationale: "データサイエンスは、RやPython、Azure MLなどのツールや統計的手法を使用してデータを深く「分析（Analyze）」し、ビジネス上の意思決定に役立つ新しい「洞察（インサイト: insights）」を得る役割を果たします。",
-                tips: "「データサイエンス（Data science）」の目的＝「データの分析と洞察の獲得（Analyzing data and gaining insights）」です。"
+                tips: "「データサイエンス」の目的＝「データの分析と洞察の獲得」です。"
             },
             {
                 question: "組織における要員計画（ワークフォース計画）の主な目的はどれか。",
@@ -213,20 +257,20 @@
                 answer: 3,
                 syllabus: "第2章：ワークフォースとタレント・マネジメント（2.1 目的）",
                 rationale: "ワークフォースとタレント・マネジメントプラクティスの主な目的は、組織がビジネス目標を達成するために従業員に求められる「必要なスキルと知識（コンピテンシー）」を特定し、適切な人材を確保することです。",
-                tips: "要員計画（Workforce planning）の核心は「必要なスキルの特定（Identifying the skills required）」です。"
+                tips: "要員計画の核心は「必要なスキルの特定」です。"
             },
             {
                 question: "個人の測定だけでなく、知識、能力、態度の影響を受けるプラクティスの有効性の測定が含まれるのは、サービスバリューチェーンのどのフェーズか。",
                 options: [
                     "エンゲージ",
-                    "提供およびサポート (Deliver and Support)",
+                    "提供およびサポート",
                     "計画",
                     "入手/構築"
                 ],
                 answer: 1,
                 syllabus: "第2章：要員計画とサービスバリューチェーン（Deliver and Support活動）",
                 rationale: "日々のサービス提供と運用が行われる「提供およびサポート（Deliver and Support）」フェーズにおいて、現場スタッフの日常的な業務遂行状況、個人のパフォーマンス、および態度やスキルがプラクティス全体に与える有効性が測定されます。",
-                tips: "現場の「個人のパフォーマンスや態度の測定」は「提供およびサポート（Deliver and Support）」で実施されます。"
+                tips: "現場の「個人のパフォーマンスや態度の測定」は「提供およびサポート」で実施されます。"
             },
             {
                 question: "組織内でリアルで正直な情報を収集するための【最も良い】方法と見なされることが多いのはどれか。",
@@ -234,12 +278,12 @@
                     "病気休暇と離職率のレビュー",
                     "従業員満足度調査（アンケート）",
                     "定期的な1対1のミーティング",
-                    "非構造化ミーティング (Unstructured meetings)"
+                    "非構造化ミーティング"
                 ],
                 answer: 3,
                 syllabus: "第2章：従業員満足度管理（2.2.4.1 フィードバック収集の技術）",
                 rationale: "コーヒーショップや廊下での立ち話など、リラックスした環境で行われる「非構造化ミーティング（Unstructured meetings）」は、公式のアンケートや面談では出てこない、従業員の「リアルで正直な本音」を引き出すための最良の手段となることがよくあります。",
-                tips: "「正直な情報（real and honest information）」＝「非構造化ミーティング（Unstructured meetings / 雑談等）」です。"
+                tips: "「正直な情報」＝「非構造化ミーティング（雑談等）」です。"
             },
             {
                 question: "新しいセルフサービスポータルのバリューストリームの「入手/構築（Obtain/build）」段階において、変更実現（Change Enablement）プラクティスの主な役割は何か。",
@@ -259,13 +303,13 @@
                 options: [
                     "サポートと理解",
                     "行動への呼びかけ",
-                    "機密性 (Confidentiality)",
+                    "機密性",
                     "従業員満足度調査"
                 ],
                 answer: 2,
                 syllabus: "第2章：従業員満足度管理（2.2.4 フィードバックの収集）",
                 rationale: "従業員が報復や評価への悪影響を恐れずに率直なフィードバックや批判的な意見を提供できるようにするためには、アンケートの匿名性や「機密性（Confidentiality）」が厳格に守られていることが大前提（不可欠な要素）となります。",
-                tips: "「恐れずに話す（without fear of negative consequences）」ための絶対条件は「機密性（Confidentiality / 匿名性の担保）」です。"
+                tips: "「恐れずに話す」ための絶対条件は「機密性（匿名性の担保）」です。"
             },
             {
                 question: "高度なアナリティクス（Advanced Analytics）における、関心が高まっている分野として言及されているものはどれか。",
@@ -304,7 +348,7 @@
                 answer: 1,
                 syllabus: "第3章：コラボレーションとワークフロー（3.3 ツール要件）",
                 rationale: "大企業における最大の課題はサイロ化（部門間の壁）です。ワークフローやコラボレーションツールは、カンバンボードなどで作業を可視化し、チーム間の「透明性を維持」し、部門間で仕事が停滞（ブロック）したり抜け落ち（ギャップ）たりしないよう監視できることが必須要件です。",
-                tips: "コラボレーションツールの最大の目的は「透明性の維持（Transparency）」と「サイロ間のブロックの解消」です。"
+                tips: "コラボレーションツールの最大の目的は「透明性の維持」と「サイロ間のブロックの解消」です。"
             },
             {
                 question: "従業員アンケートに関する記述のうち、正しいものはどれか。",
@@ -317,7 +361,7 @@
                 answer: 2,
                 syllabus: "第2章：従業員満足度管理（2.2.4.1 アンケートの実施方法）",
                 rationale: "効果的な従業員アンケートは、全社規模の年次調査（公式）だけでなく、チーム内でのこまめなパルスサーベイや、対話形式でのフィードバック収集（非公式）など、さまざまなレベルと頻度でブレンドして実施されるべきです。",
-                tips: "アンケートは年に1回・全社一斉という固定観念を捨て、「複数のレベルで公式・非公式に（formally and informally）」実施されるのがITILのベストプラクティスです。"
+                tips: "アンケートは年に1回・全社一斉という固定観念を捨て、「複数のレベルで公式・非公式に」実施されるのがITILのベストプラクティスです。"
             },
             {
                 question: "組織のデータの「複雑さ」を評価するために使用できる基準はどれか。",
@@ -330,7 +374,7 @@
                 answer: 2,
                 syllabus: "第3章：情報と技術（3.2.2 ビッグデータの複雑さの基準）",
                 rationale: "組織が保有するデータ（ビッグデータ等）の複雑さを評価する際、データサイズや構造に加え、テキストや動画などの「データタイプ（Data type）」、連携するシステムの数である「データソース（Data sources）」、そして「データの増加率（growth rate）」が重要な評価基準となります。",
-                tips: "データの複雑さの評価基準＝「タイプ（Type）」「ソース（Sources）」「増加率（Growth rate）」です。"
+                tips: "データの複雑さの評価基準＝「タイプ」「ソース」「増加率」です。"
             },
             {
                 question: "多くのソーシャルメディア・プラットフォーム、特にコミュニケーションに特化したプラットフォームの機能として説明されているコラボレーションツールはどれか。",
@@ -338,7 +382,7 @@
                     "イベント・アンケート",
                     "ポータル",
                     "トピックベースのフォーラムとフォルダ",
-                    "コミュニケーション・ウォール (Communications wall)"
+                    "コミュニケーション・ウォール"
                 ],
                 answer: 3,
                 syllabus: "第3章：コラボレーションとワークフロー（3.3.2 ツールの機能）",
@@ -356,12 +400,12 @@
                 answer: 2,
                 syllabus: "第3章：情報と技術（3.2.1 データアナリティクスの価値）",
                 rationale: "データアナリティクス技術を導入する究極の目的は、単にデータを処理することではなく、抽出された洞察（インサイト）を利用して、データと証拠に裏付けられた「情報に基づいた（Informed）ビジネス上の意思決定」を迅速かつ正確に行うことです。",
-                tips: "アナリティクスの最終目的＝「情報に基づいたビジネス上の意思決定（Make informed business decisions）」です。"
+                tips: "アナリティクスの最終目的＝「情報に基づいたビジネス上の意思決定」です。"
             },
             {
                 question: "変化するサービス需要の要件を理解および予測し、ワークフォース計画およびタレントマネジメント活動に影響を与える、サービスバリューチェーンのアクティビティはどれか。",
                 options: [
-                    "計画 (Plan)",
+                    "計画",
                     "エンゲージ",
                     "改善",
                     "デザインおよびトランジション"
@@ -369,7 +413,7 @@
                 answer: 0,
                 syllabus: "第2章：要員計画とサービスバリューチェーン（Plan活動）",
                 rationale: "「エンゲージ」を通じて収集した需要のシグナルをもとに、将来の需要要件を「予測（Forecast）」し、それに応じてどのようなスキルや要員が必要になるかという戦略的なタレントマネジメントのロードマップを立てるのは「計画（Plan）」アクティビティの役割です。",
-                tips: "「将来の需要の予測（Forecasting）」と「要員計画への戦略的反映」＝「計画（Plan）」です。"
+                tips: "「将来の需要の予測」と「要員計画への戦略的反映」＝「計画」です。"
             },
             {
                 question: "インターフェース・デザインの観点から見た、コラボレーションに使用されるツールの「共通の特性」は何か。",
@@ -382,7 +426,7 @@
                 answer: 0,
                 syllabus: "第3章：コラボレーションとワークフロー（3.3.2 ユーザーインターフェース）",
                 rationale: "現代の効果的なコラボレーションツール（Slack、Teams等）の最大の特徴は、従業員がプライベートで使い慣れている「ソーシャルメディア（SNS）プラットフォームに似た直感的なインターフェース」を持っていることです。これによりトレーニングなしで迅速な導入が可能になります。",
-                tips: "現代のコラボレーションツールのUI＝「ソーシャルメディアに似ている（Resembling social media platforms）」です。"
+                tips: "現代のコラボレーションツールのUI＝「ソーシャルメディアに似ている」です。"
             },
             {
                 question: "新しいセルフサービスポータルのバリューストリームにおける「提供およびサポート（Deliver and Support）」のステップ中に、現在稼働中のサービスとそれに関連する構成アイテムの情報を確認する責任があるプラクティスはどれか。",
@@ -390,12 +434,12 @@
                     "リスク管理",
                     "サプライヤ管理",
                     "サービスポートフォリオ管理",
-                    "構成管理 (Configuration Management)"
+                    "構成管理"
                 ],
                 answer: 3,
                 syllabus: "第4章：新しいサービスの作成バリューストリーム（構成管理の貢献）",
                 rationale: "稼働段階（提供およびサポート）において、新しく展開されたポータルやその依存関係にあるインフラの正確な情報（ステータスや関係性）を提供・維持・確認する役割を担うのは、一貫して「構成管理」プラクティスです。",
-                tips: "「現在稼働中のサービスや構成アイテムの情報の確認」＝構成管理（Configuration Management）です。"
+                tips: "「現在稼働中のサービスや構成アイテムの情報の確認」＝構成管理です。"
             },
             {
                 question: "組織が社内で構築（Build）するのではなく、サプライヤから製品を購入（Buy）することを選択する理由として適切な【2つ】はどれか。\n1.製品を作成するための組織のプロセスが未熟である\n2.製品を作成するために必要な作業が、予測可能で反復的である\n3.製品の作成が、組織のスタッフが持つ知識に依存している\n4.標準およびポリシーへのコンプライアンスが不可欠である",
@@ -421,20 +465,20 @@
                 answer: 0,
                 syllabus: "第5章：作業の優先順位付けと管理（5.1.1 チケットとキューの関係）",
                 rationale: "チケットシステム自体が悪いわけではありません。「キュー（待ち行列）」が発生する根本的な原因は、チケットの存在そのものではなく、組織が作業に対して十分なリソースを割り当てていない、または割り当ての仕組み（優先順位付けやディスパッチ）が非効率である結果として生じます。",
-                tips: "「キュー（Queues）が発生する原因」＝「リソースの割り当て方法（How the organization allocates resources）」の結果です。"
+                tips: "「キューが発生する原因」＝「リソースの割り当て方法」の結果です。"
             },
             {
                 question: "金融機関の財務アナリストが、担当するポートフォリオ企業に影響を与えるイベントの通知を「リアルタイム」で受け取るような統合アプローチはどれか。",
                 options: [
                     "インクリメンタル・デリバリー",
-                    "パブリッシュ/サブスクライブ統合 (Publish-Subscribe integration)",
+                    "パブリッシュ/サブスクライブ統合",
                     "（バリュー）ストリームとの直接統合",
                     "ポイントツーポイント統合"
                 ],
                 answer: 1,
                 syllabus: "第3章：情報と技術（3.1 統合アプローチの種類と特徴）",
                 rationale: "パブリッシュ/サブスクライブ（Pub/Sub）モデルは、メッセージをイベントブローカーに発行（Publish）し、それを受信登録（Subscribe）している複数のシステムやユーザーにリアルタイムに一斉配信する非同期通信の仕組みです。金融情報のリアルタイム通知に最適です。",
-                tips: "「リアルタイムの通知」「1対多のメッセージ配信」＝パブリッシュ/サブスクライブ（Pub/Sub）統合です。"
+                tips: "「リアルタイムの通知」「1対多のメッセージ配信」＝パブリッシュ/サブスクライブ統合です。"
             },
             {
                 question: "RPA（ロボティック・プロセス・オートメーション）テクノロジの文脈において、コグニティブ・プラットフォームの主な焦点は何か。",
@@ -447,7 +491,7 @@
                 answer: 1,
                 syllabus: "第3章：情報と技術（3.4.2 コグニティブRPA）",
                 rationale: "従来のRPAは構造化データしか扱えませんが、AIを組み込んだ「コグニティブ（認知的）・プラットフォーム」は、非構造化データ（音声通話、手書きテキスト、画像など）を解析し、RPAが処理できる構造化情報に変換（抽出・構造化）することに焦点を当てています。",
-                tips: "コグニティブRPAの役割＝「非構造化データ（音声・画像等）からの情報の抽出と構造化」です。"
+                tips: "コグニティブRPAの役割＝「非構造化データからの情報の抽出と構造化」です。"
             },
             {
                 question: "ビッグデータの文脈における、クラウドストレージの目的は何か。",
@@ -460,7 +504,7 @@
                 answer: 3,
                 syllabus: "第3章：情報と技術（3.2.2 ビッグデータとクラウドストレージ）",
                 rationale: "ビッグデータは膨大なストレージ容量を必要とします。クラウドストレージを利用する最大の目的は、企業自身が巨大なサーバーラックを保有・保守するのではなく、クラウド・プロバイダーに「物理環境（ハードウェア）の管理」を任せ、必要な分だけリソースを利用できるようにすることです。",
-                tips: "クラウドストレージの役割＝「物理環境（ハードウェア）の所有と管理のアウトソーシング」です。"
+                tips: "クラウドストレージの役割＝「物理環境の所有と管理のアウトソーシング」です。"
             },
             {
                 question: "2つのサービスデスクを統合（コンソリデーション）するプロジェクトには、双方のスタッフのサポートが必要である。改善イニシアチブをサポートするための「要員計画（ワークフォース・アプローチ）」を計画する【最も良い】方法はどれか。",
@@ -486,7 +530,7 @@
                 answer: 2,
                 syllabus: "第2章：従業員満足度管理（2.2.4 フィードバック収集アプローチ）",
                 rationale: "「定期的な1対1のミーティング（1on1）」は、マネージャーと従業員が自然な会話を通じて、画一的なアンケートでは拾いきれない詳細なニュアンスや個別の懸念事項（より粒度の細かい情報）を深く掘り下げて収集するのに最適です。",
-                tips: "「アンケートより詳細（granular detail）で自然な方法」＝「1対1のミーティング（1on1）」です。"
+                tips: "「アンケートより詳細で自然な方法」＝「1対1のミーティング」です。"
             },
             {
                 question: "高度なアナリティクス技術の例はどれか。",
@@ -499,7 +543,7 @@
                 answer: 0,
                 syllabus: "第3章：情報と技術（3.2 高度なアナリティクスの技術）",
                 rationale: "高度なアナリティクス（Advanced Analytics）を支える具体的なテクノロジー・技術手法として、機械学習（Machine learning）、データマイニング、テキストマイニング、複合イベント処理、グラフ分析などがシラバスで挙げられています。",
-                tips: "高度アナリティクスの具体的手法＝「機械学習（Machine learning）」と「データ/テキスト・マイニング」です。"
+                tips: "高度アナリティクスの具体的手法＝「機械学習」と「データ/テキスト・マイニング」です。"
             },
             {
                 question: "ポイントツーポイント（P2P）統合アプローチの欠点は何か。",
@@ -512,7 +556,7 @@
                 answer: 3,
                 syllabus: "第3章：情報と技術（3.1 統合アプローチの種類と特徴）",
                 rationale: "ポイントツーポイント統合は、システム同士を1対1で直接繋ぐ手法です。システム数が少ないうちは簡単ですが、システムが3つ、4つと増えるにつれて接続数（APIの数）が指数関数的に急増し、スパゲッティ状態となって保守が困難になるという致命的な欠点があります。",
-                tips: "P2P統合の最大の欠点＝「システム数が増えると接続数（複雑さ）が爆発的に増大する（スパゲッティ化）」です。"
+                tips: "P2P統合の最大の欠点＝「システム数が増えると接続数（複雑さ）が爆発的に増大する」です。"
             },
             {
                 question: "「デザインおよびトランジション」活動中の要員計画とタレントマネジメントの文脈において、「T型」および「π（パイ）型」の人材の概念が【主に】強調しているものは何か。",
@@ -525,7 +569,7 @@
                 answer: 0,
                 syllabus: "第2章：組織と人材（2.2.2.1 T型人材とπ型人材）",
                 rationale: "T型/π型人材の概念は、特定の専門領域（Tの縦棒）での深い知識を持つと同時に、他分野との連携やコミュニケーションを可能にする「幅広い一般的なスキルや知識（Tの横棒：ジェネラリストとしての能力）」を併せ持つことの重要性を強調しています。サイロを打破するために不可欠です。",
-                tips: "T型/π型人材の横棒の意味＝「幅広い一般的なコンピテンシー（broad range of general competencies）の重視」です。"
+                tips: "T型/π型人材の横棒の意味＝「幅広い一般的なコンピテンシーの重視」です。"
             },
             {
                 question: "組織のデータの「複雑さ」を評価するために使用される基準はどれか。",
@@ -538,7 +582,7 @@
                 answer: 0,
                 syllabus: "第3章：情報と技術（3.2.2 ビッグデータの複雑さの基準）",
                 rationale: "組織が保有するデータの複雑さを評価する際、データサイズや構造に加え、テキストや動画などの「データタイプ（Data type）」、連携するシステムの数である「データソース（Data sources）」、そして「データの増加率（growth rate）」が重要な評価基準となります。",
-                tips: "データの複雑さの評価基準＝「タイプ（Type）」「ソース（Sources）」「増加率（Growth rate）」です。（※前出の類似問題と確認）"
+                tips: "データの複雑さの評価基準＝「タイプ」「ソース」「増加率」です。（※前出の類似問題と確認）"
             },
             {
                 question: "AI（人工知能）や機械学習がITサービスデスク業務を支援するために導入できる機能として、該当し【ない】ものはどれか。",
@@ -564,7 +608,7 @@
                 answer: 1,
                 syllabus: "第3章：情報と技術（3.2.1 データアナリティクス）",
                 rationale: "データアナリティクス（Data Analytics）の公式定義です。BIツールや専門ソフトウェアを使用してデータセットを検査・分析し、隠れたパターンや情報を抽出してビジネス上の結論（インサイト）を導き出す手法全体を指します。",
-                tips: "「データセットを調査し、情報について結論を導き出す方法」＝「データアナリティクス（Data analytics）」です。"
+                tips: "「データセットを調査し、情報について結論を導き出す方法」＝「データアナリティクス」です。"
             },
             {
                 question: "サービスデザインにおいて、統合方法（インテグレーション・メソドロジー）を選択する際の考慮事項はどれか。",
@@ -603,7 +647,7 @@
                 answer: 1,
                 syllabus: "第3章：情報と技術（3.7.4 アジャイルとCI/CDの適用）",
                 rationale: "アジャイルやCI/CDは、短いサイクルで反復的にリリースを行い、ユーザーのフィードバックを見ながら方向修正していく手法です。そのため、初期段階で「現在や将来の要件がどうなるか予測できない（不確実性が高い）」状況において最大の真価を発揮します。",
-                tips: "アジャイル/CI/CDの最大の適用条件＝「要件の不確実性が高い（High uncertainty）」環境です。"
+                tips: "アジャイル/CI/CDの最大の適用条件＝「要件の不確実性が高い」環境です。"
             },
             {
                 question: "チームの「ウェルビーイング（健康・幸福度）」に関連する問題を監視するための有用なテクニックとなり得るものはどれか。",
@@ -629,7 +673,7 @@
                 answer: 1,
                 syllabus: "第2章：要員計画（2.2.3 組織変更と要員計画）",
                 rationale: "要員計画（Workforce planning）の中核的なスコープは、組織の「現在の従業員のスキル・リソース（現在）」を評価し、戦略に基づく「将来必要なスキル・リソース（未来）」を予測し、その間に存在する「ギャップを特定」して埋める計画を立てることです。",
-                tips: "要員計画のスコープ＝「現在（As-is）と未来（To-be）の間のギャップ（不足スキル・要員）の特定」です。"
+                tips: "要員計画のスコープ＝「現在と未来の間のギャップの特定」です。"
             },
             {
                 question: "AIOps（Artificial Intelligence for IT Operations）の主な目標は何か。",
@@ -642,7 +686,7 @@
                 answer: 2,
                 syllabus: "第3章：情報と技術（3.5.3 AIOps）",
                 rationale: "AIOpsは人間を排除するためではなく、クラウドやコンテナ化など「現代のインフラストラクチャの進化（複雑化や膨大なアラート増大）」によって引き起こされる、人間のオペレーターだけでは処理しきれない課題を、AIを活用して支援・対処することを主な目標としています。",
-                tips: "AIOpsの目標＝「現代インフラの複雑化・巨大化による課題への対処（人間の支援）」です。"
+                tips: "AIOpsの目標＝「現代インフラの複雑化・巨大化による課題への対処」です。"
             },
             {
                 question: "ある組織は、サービスの動的な需要に応じて、コンピューティング能力を迅速に増減できる「エラスティック（弾力的な）クラウド・プラットフォーム」を使用している。これにより達成できる【最も良い】利点は何か。",
@@ -660,7 +704,7 @@
             {
                 question: "将来の従業員の入力（フィードバック提供）が妨げられない（抑制されない）ことを確実にするために重要な要素はどれか。",
                 options: [
-                    "行動への呼びかけ (Call to action)",
+                    "行動への呼びかけ",
                     "機密性",
                     "病気休暇と離職率のレビュー",
                     "サポートと理解"
@@ -668,20 +712,20 @@
                 answer: 0,
                 syllabus: "第2章：従業員満足度管理（2.2.4 フィードバックの収集）",
                 rationale: "従業員が提案や不満を言っても「何も変わらない」と感じると、次からは意見を出さなくなります。経営陣や管理者が受け取ったフィードバックに対して実際に「行動（Call to action）」を起こし、結果を可視化することが、継続的なフィードバックを維持する鍵です。",
-                tips: "「将来のフィードバックを促す」ためのアクション＝「行動への呼びかけ（Call to action / 意見に対する実際の対応）」です。（※前出類似問題の再確認）"
+                tips: "「将来のフィードバックを促す」ためのアクション＝「行動への呼びかけ」です。"
             },
             {
                 question: "あらかじめ決められた順序なしに、準備ができた個々の統合から展開できる統合アプローチはどれか。",
                 options: [
                     "インクリメンタル・デリバリー",
-                    "（バリュー）ストリームとの直接統合 (Direct integration with the value stream)",
+                    "（バリュー）ストリームとの直接統合",
                     "ビッグバン・アプローチ",
                     "パブリッシュ/サブスクライブ統合"
                 ],
                 answer: 1,
                 syllabus: "第3章：情報と技術（3.1.2 統合アプローチの種類）",
                 rationale: "「ストリームとの直接統合」アプローチは、依存関係を極力排除し、開発が完了した（準備ができた）コンポーネントから順次、順序を問わずに独立して本番環境へ直接リリース（統合）していく、最もアジリティの高い手法です。",
-                tips: "「順序なし（no predetermined order）」「準備ができ次第（as soon as they are ready）」＝ストリームとの直接統合です。"
+                tips: "「順序なし」「準備ができ次第」＝ストリームとの直接統合です。"
             },
             {
                 question: "バリューストリームのコンテキストにおいて「スループット（Throughput）」という用語は何を表しているか。",
@@ -694,7 +738,7 @@
                 answer: 0,
                 syllabus: "第4章：バリューストリーム・マッピング（4.1.7 VSMの指標）",
                 rationale: "スループット（Throughput）の定義は、特定の期間内にプロセス（システム）を通過して完了する作業の量、すなわち「作業がシステムに入り、完了して出ていく割合（レート）」を表します。システムの処理能力を示す重要指標です。",
-                tips: "スループット＝「処理速度・完了する割合（Rate at which work enters or exits）」です。時間はリードタイム/サイクルタイムです。"
+                tips: "スループット＝「処理速度・完了する割合」です。時間はリードタイム/サイクルタイムです。"
             },
             {
                 question: "システム・ペアを直接リンクする統合アプローチであり、統合されるシステム数が少ないシンプルなサービスに適しているものはどれか。",
@@ -702,25 +746,25 @@
                     "パブリッシュ/サブスクライブ統合",
                     "（バリュー）ストリームとの直接統合",
                     "インクリメンタル・デリバリー",
-                    "ポイントツーポイント統合 (Point-to-point integration)"
+                    "ポイントツーポイント統合"
                 ],
                 answer: 3,
                 syllabus: "第3章：情報と技術（3.1.1 統合のトポロジー）",
                 rationale: "「ポイントツーポイント（P2P）統合」は、システムAとシステムBを仲介者を置かずに直接1対1で接続（リンク）する構成です。初期構築は簡単ですが、システム数が増えると接続が指数関数的に増えるため、システム数が少ない小規模環境に限定して適しています。",
-                tips: "「ペアを直接リンクする（directly linking pairs）」「システム数が少ない（small number）」＝ポイントツーポイント（P2P）統合です。"
+                tips: "「ペアを直接リンクする」「システム数が少ない」＝ポイントツーポイント統合です。"
             },
             {
                 question: "チームメンバーが定期的に自分自身の「士気（モラル）の指標」を提出することに関与するコンポーネントはどれか。",
                 options: [
                     "非構造化ミーティング",
                     "従業員満足度調査",
-                    "スタッフ主導の指標 (Staff-driven metrics)",
+                    "スタッフ主導の指標",
                     "病気休暇と離職率のレビュー"
                 ],
                 answer: 2,
                 syllabus: "第2章：従業員満足度管理（2.2.4.1 フィードバック収集の技術）",
                 rationale: "「スタッフ主導の指標（Staff-driven metrics）」は、管理者が上から評価するのではなく、チームメンバー自身がニコニコカレンダー（Niko-niko calendar）や幸福度ボードなどを使って日々の気分や士気（モラル）を自己申告する手法です。",
-                tips: "「自分自身の士気指標（morale indicators）を提出する」＝「スタッフ主導の指標（Staff-driven metrics）」です。"
+                tips: "「自分自身の士気指標を提出する」＝「スタッフ主導の指標」です。"
             },
             {
                 question: "CI/CDパイプラインには、ビルド自動化、テスト自動化、展開（デプロイ）自動化の3つのステージがある。「ビルド自動化（build automation）」のステージの主な焦点を最もよく説明しているのはどれか。",
@@ -733,7 +777,7 @@
                 answer: 1,
                 syllabus: "第3章：情報と技術（3.7 CI/CDのステージ）",
                 rationale: "「ビルド自動化」フェーズの主な役割は、複数の開発者がローカルで書いたソースコードを中央の共有リポジトリ（単一のブランチ）に集め（マージ）、コンパイルして実行可能なパッケージを作成する初期の統合作業を行うことです。",
-                tips: "「ビルド（Build）自動化」の焦点＝「複数のコード変更の統合・マージ（Merging code changes）」です。"
+                tips: "「ビルド（Build）自動化」の焦点＝「複数のコード変更の統合・マージ」です。"
             },
             {
                 question: "コラボレーションツールで「フォーラム・アプローチ」を利用することの意義は何か。",
@@ -744,69 +788,178 @@
                     "サービスリクエストや問題報告のための非効率なメール使用を減らすため"
                 ],
                 answer: 2,
-                syllabus: "第3章：コラボレーションとワークフロー（3.3.1 コラボレーションツールの機能）",
-                rationale: "SlackのチャンネルやTeamsのチャネルのような「トピックベースのフォーラム」機能は、特定のプロジェクトや課題（トピック）ごとに関係者を集め、メールの山に埋もれることなく、直接的でオープンな議論と情報共有を促進するために非常に重要です。",
-                tips: "フォーラム機能の意義＝「特定のトピック（Specific topics）に基づく直接的な議論（Direct discussion）の促進」です。"
+                rationale: "「改善イニシアチブを設定する」ステップには、アプローチを社会化（関係者から同意・支持を得る）するためのコミュニケーション活動が含まれます。このステップのアクティビティには、メリットと影響を売り込むために主要な人々と協力することなどが含まれます。",
+                tips: "「コミュニケーション」「アプローチの共有」「利益を売り込む」活動はイニシアチブ設定（準備段階）で行われます。"
             }
         ];
 
+        let questions = [...originalQuestions];
         let currentQuestion = 0;
         let score = 0;
+        let userAnswers = new Array(questions.length).fill(null);
+        
+        let isPlaying = false;
+        let utterance = new SpeechSynthesisUtterance();
+        utterance.lang = 'ja-JP';
 
         const qText = document.getElementById('question-text');
         const optionsContainer = document.getElementById('options-container');
         const expBox = document.getElementById('explanation-box');
         const expContent = document.getElementById('explanation-content');
         const nextBtn = document.getElementById('next-btn');
+        const prevBtn = document.getElementById('prev-btn');
         const progText = document.getElementById('progress-text');
         const progBar = document.getElementById('progress-bar');
         const quizContainer = document.getElementById('quiz-container');
         const resultContainer = document.getElementById('result-container');
         const qBadge = document.getElementById('question-badge');
+        
+        const playBtn = document.getElementById('play-audio-btn');
+        const stopBtn = document.getElementById('stop-audio-btn');
+        const audioStatus = document.getElementById('audio-status');
+        const questionSelector = document.getElementById('question-selector');
+        
+        const shuffleBtn = document.getElementById('shuffle-btn');
+        const resultShuffleBtn = document.getElementById('result-shuffle-btn');
+        const shuffleModal = document.getElementById('shuffle-modal');
+        const modalCancelBtn = document.getElementById('modal-cancel-btn');
+        const modalConfirmBtn = document.getElementById('modal-confirm-btn');
+
+        function shuffleArray(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex !== 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        function resetAndRestart(isShuffle = false) {
+            if (isPlaying) stopAudio();
+            
+            if (isShuffle) {
+                questions = shuffleArray([...originalQuestions]);
+            } else {
+                questions = [...originalQuestions];
+            }
+            
+            currentQuestion = 0;
+            score = 0;
+            userAnswers = new Array(questions.length).fill(null);
+            
+            questionSelector.innerHTML = '';
+            questions.forEach((_, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.text = `問 ${index + 1}`;
+                questionSelector.appendChild(option);
+            });
+            
+            quizContainer.classList.remove('hidden');
+            resultContainer.classList.add('hidden');
+            
+            loadQuestion();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        shuffleBtn.onclick = () => {
+            shuffleModal.classList.remove('hidden');
+        };
+
+        modalCancelBtn.onclick = () => {
+            shuffleModal.classList.add('hidden');
+        };
+
+        modalConfirmBtn.onclick = () => {
+            shuffleModal.classList.add('hidden');
+            resetAndRestart(true); 
+        };
+        
+        resultShuffleBtn.onclick = () => {
+            resetAndRestart(true); 
+        };
+
+        questions.forEach((_, index) => {
+            const option = document.createElement('option');
+            option.value = index;
+            option.text = `問 ${index + 1}`;
+            questionSelector.appendChild(option);
+        });
+
+        questionSelector.addEventListener('change', (e) => {
+            if (isPlaying) stopAudio();
+            currentQuestion = parseInt(e.target.value, 10);
+            loadQuestion();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
 
         function loadQuestion() {
+            if (questions.length === 0) return;
+
             const q = questions[currentQuestion];
             qBadge.innerText = `問 ${currentQuestion + 1} / ${questions.length}`;
             qText.innerHTML = q.question.replace(/\n/g, '<br>');
-            optionsContainer.innerHTML = '';
-            expBox.classList.add('hidden');
             
             progText.innerText = `${currentQuestion + 1} / ${questions.length}`;
             progBar.style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
-
-            q.options.forEach((opt, index) => {
-                const btn = document.createElement('button');
-                btn.className = 'w-full text-left p-4 rounded-xl border-2 border-slate-200 hover:border-indigo-400 focus:outline-none transition-all duration-150 bg-white font-medium text-slate-700 shadow-sm hover:bg-slate-50 flex items-start gap-3';
-                btn.innerHTML = `<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-slate-100 text-slate-600 text-xs font-bold shrink-0 mt-0.5">${String.fromCharCode(65 + index)}</span> <span>${opt}</span>`;
-                btn.onclick = () => selectOption(index, btn);
-                optionsContainer.appendChild(btn);
-            });
-        }
-
-        function selectOption(selectedIndex, btnElement) {
-            const q = questions[currentQuestion];
-            const buttons = optionsContainer.querySelectorAll('button');
             
-            buttons.forEach(b => {
-                b.disabled = true;
-                b.classList.remove('hover:border-indigo-400', 'hover:bg-slate-50', 'cursor-pointer');
-                b.classList.add('opacity-75');
-            });
+            questionSelector.value = currentQuestion;
 
-            if (selectedIndex === q.answer) {
-                btnElement.classList.remove('border-slate-200', 'opacity-75');
-                btnElement.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-900', 'opacity-100', 'ring-2', 'ring-emerald-200');
-                score++;
+            if (currentQuestion === 0) {
+                prevBtn.classList.add('hidden');
             } else {
-                btnElement.classList.remove('border-slate-200', 'opacity-75');
-                btnElement.classList.add('border-rose-500', 'bg-rose-50', 'text-rose-900', 'opacity-100');
-                
-                // 正解をハイライト
-                buttons[q.answer].classList.remove('border-slate-200', 'opacity-75');
-                buttons[q.answer].classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-900', 'opacity-100', 'ring-2', 'ring-emerald-200');
+                prevBtn.classList.remove('hidden');
             }
 
-            // 解説をシラバス構造でリッチに描画
+            if (userAnswers[currentQuestion] !== null) {
+                showAnswerState(userAnswers[currentQuestion]);
+            } else {
+                optionsContainer.innerHTML = '';
+                expBox.classList.add('hidden');
+                nextBtn.classList.add('hidden'); 
+
+                q.options.forEach((opt, index) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'w-full text-left p-4 rounded-xl border-2 border-slate-200 hover:border-indigo-400 focus:outline-none transition-all duration-150 bg-white font-medium text-slate-700 shadow-sm hover:bg-slate-50 flex items-start gap-3';
+                    btn.innerHTML = `<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-slate-100 text-slate-600 text-xs font-bold shrink-0 mt-0.5">${String.fromCharCode(65 + index)}</span> <span>${opt}</span>`;
+                    btn.onclick = () => {
+                        if (isPlaying) stopAudio();
+                        selectOption(index);
+                    };
+                    optionsContainer.appendChild(btn);
+                });
+            }
+        }
+
+        function selectOption(selectedIndex) {
+            userAnswers[currentQuestion] = selectedIndex;
+            if (selectedIndex === questions[currentQuestion].answer) {
+                score++;
+            }
+            showAnswerState(selectedIndex);
+        }
+
+        function showAnswerState(selectedIndex) {
+            const q = questions[currentQuestion];
+            optionsContainer.innerHTML = '';
+            
+            q.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'w-full text-left p-4 rounded-xl border-2 transition-all duration-150 font-medium flex items-start gap-3';
+                btn.innerHTML = `<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-slate-100 text-slate-600 text-xs font-bold shrink-0 mt-0.5">${String.fromCharCode(65 + index)}</span> <span>${opt}</span>`;
+                btn.disabled = true; 
+                
+                if (index === q.answer) {
+                    btn.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-900', 'ring-2', 'ring-emerald-200');
+                } else if (index === selectedIndex && index !== q.answer) {
+                    btn.classList.add('border-rose-500', 'bg-rose-50', 'text-rose-900');
+                } else {
+                    btn.classList.add('border-slate-200', 'text-slate-700', 'opacity-60');
+                }
+                optionsContainer.appendChild(btn);
+            });
+
             expContent.innerHTML = `
                 <div class="bg-indigo-50/80 p-3 rounded-lg border border-indigo-100 text-indigo-900 text-xs font-medium">
                     <span class="font-bold">📘 対象シラバス：</span> ${q.syllabus}
@@ -821,24 +974,103 @@
             `;
             expBox.classList.remove('hidden');
             
-            setTimeout(() => {
-                expBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }, 80);
+            nextBtn.classList.remove('hidden');
+            if (currentQuestion === questions.length - 1) {
+                nextBtn.innerText = "結果を見る";
+            } else {
+                nextBtn.innerText = "次の問題へ進む";
+            }
+
+            if(!isPlaying) {
+                setTimeout(() => {
+                    expBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 80);
+            }
         }
 
         nextBtn.onclick = () => {
-            currentQuestion++;
-            if (currentQuestion < questions.length) {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
                 loadQuestion();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             } else {
                 quizContainer.classList.add('hidden');
                 resultContainer.classList.remove('hidden');
                 document.getElementById('score').innerText = score;
+                document.getElementById('total-score').innerText = `/ ${questions.length}`;
             }
         };
 
-        // 初期化
+        prevBtn.onclick = () => {
+            if (currentQuestion > 0) {
+                if (isPlaying) stopAudio();
+                currentQuestion--;
+                loadQuestion();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        };
+
+        playBtn.onclick = () => {
+            if (isPlaying) return;
+            isPlaying = true;
+            playBtn.classList.add('hidden');
+            stopBtn.classList.remove('hidden');
+            audioStatus.classList.remove('hidden');
+            
+            if (userAnswers[currentQuestion] === null) {
+                 selectOption(questions[currentQuestion].answer); 
+            }
+            readCurrentQuestion();
+        };
+
+        stopBtn.onclick = stopAudio;
+
+        function stopAudio() {
+            isPlaying = false;
+            window.speechSynthesis.cancel();
+            stopBtn.classList.add('hidden');
+            playBtn.classList.remove('hidden');
+            audioStatus.classList.add('hidden');
+        }
+
+        function readCurrentQuestion() {
+            if (!isPlaying) return;
+            
+            window.speechSynthesis.cancel();
+            const q = questions[currentQuestion];
+            
+            let textToRead = `第${currentQuestion + 1}問。問題。。。${q.question}。。。。`;
+            textToRead += `正解は。。。${q.options[q.answer].replace(/\(.*?\)/g, '')}。。。。`; 
+            textToRead += `解説。。。${q.rationale}。。。。`;
+            textToRead += `試験対策のポイント。。。${q.tips}`;
+            
+            utterance.text = textToRead;
+            
+            utterance.onend = () => {
+                if (isPlaying) {
+                    if (currentQuestion < questions.length - 1) {
+                        currentQuestion++;
+                        loadQuestion();
+                        if (userAnswers[currentQuestion] === null) {
+                             selectOption(questions[currentQuestion].answer); 
+                        }
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                        setTimeout(readCurrentQuestion, 1500); 
+                    } else {
+                        stopAudio();
+                        alert("すべての問題の読み上げが完了しました。お疲れ様でした！");
+                    }
+                }
+            };
+            
+            utterance.onerror = (e) => {
+                console.error("音声読み上げエラー", e);
+                if(isPlaying) stopAudio();
+            };
+            
+            window.speechSynthesis.speak(utterance);
+        }
+
         loadQuestion();
     </script>
 </body>
