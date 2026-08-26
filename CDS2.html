@@ -24,7 +24,6 @@
             </div>
             
             <div class="flex items-center gap-2 w-full md:w-auto overflow-x-auto pb-1 md:pb-0">
-                <!-- ジャンプ機能 -->
                 <div class="flex items-center bg-indigo-800/80 rounded-lg border border-indigo-400/30 px-2 py-1">
                     <span class="text-xs font-semibold mr-2 whitespace-nowrap text-indigo-100">ジャンプ:</span>
                     <select id="question-selector" class="bg-indigo-900 text-white text-sm rounded px-1 py-1 focus:outline-none focus:ring-2 focus:ring-emerald-400 cursor-pointer">
@@ -33,12 +32,10 @@
 
                 <span id="progress-text" class="hidden sm:inline text-sm font-semibold bg-indigo-800/80 px-3 py-1.5 rounded-full border border-indigo-400/30 whitespace-nowrap"></span>
                 
-                <!-- ランダム出題機能 -->
                 <button id="shuffle-btn" class="flex-1 md:flex-none bg-amber-500 hover:bg-amber-400 text-white text-sm font-bold py-1.5 px-3 rounded-full shadow transition flex items-center justify-center gap-1 whitespace-nowrap ml-auto">
                     <span>🔀 ランダム</span>
                 </button>
                 
-                <!-- 音声学習機能 -->
                 <button id="play-audio-btn" class="flex-1 md:flex-none bg-emerald-500 hover:bg-emerald-400 text-white text-sm font-bold py-1.5 px-3 rounded-full shadow transition flex items-center justify-center gap-1 whitespace-nowrap ml-auto">
                     <span>▶️ 音声学習</span>
                 </button>
@@ -129,7 +126,7 @@
                 ],
                 answer: 3,
                 syllabus: "第5章：作業の優先順位付けと管理（5.1.1 チケットとしての作業の管理）",
-                rationale: "チケットは、作業の個別の単位（離散的な作業単位）と、その想定されるライフサイクル内での「現在の状態」を表します。同時並行で多数のタスクが進行する現場において、作業の漏れを防ぎステータスを可視化・追跡する基盤となる概念です。",
+                rationale: "チケットが個別の作業単位と、その想定される寿命内での現在の状態を表すことを認識することが重要です。忙しい現場で作業の漏れを防ぎステータスを可視化・追跡する基盤となります。",
                 tips: "「記録（Record）」「追跡（Track）」「個別の作業単位」というキーワードが出た場合は『チケットとしての作業の管理』に直結します。"
             },
             {
@@ -757,12 +754,37 @@
                 tips: "「階層型組織の打破」「部門横断（クロスファンクショナル）」「マトリックス構造」「マルチスキル」がスウォーミング導入の理想的コンテキストです。"
             }
         ];
-        let questions = [...originalQuestions];
+
+        // --- STREAMING_CHUNK:Implementing option shuffle and logic ---
+        function shuffleArray(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex !== 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        function prepareQuestions(baseQuestions) {
+            return baseQuestions.map(q => {
+                let optionsWithIndex = q.options.map((opt, index) => ({ text: opt, originalIndex: index }));
+                // 選択肢の順番をランダムにシャッフル
+                for (let i = optionsWithIndex.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [optionsWithIndex[i], optionsWithIndex[j]] = [optionsWithIndex[j], optionsWithIndex[i]];
+                }
+                // シャッフル後の正解インデックスを特定
+                const newAnswerIndex = optionsWithIndex.findIndex(o => o.originalIndex === q.answer);
+                return { ...q, options: optionsWithIndex.map(o => o.text), answer: newAnswerIndex };
+            });
+        }
+
+        let questions = prepareQuestions([...originalQuestions]);
         let currentQuestion = 0;
         let score = 0;
         let userAnswers = new Array(questions.length).fill(null);
         
-        // --- 音声再生用の変数 ---
         let isPlaying = false;
         let utterance = new SpeechSynthesisUtterance();
         utterance.lang = 'ja-JP';
@@ -779,7 +801,6 @@
         const resultContainer = document.getElementById('result-container');
         const qBadge = document.getElementById('question-badge');
         
-        // 音声UIとセレクトボックスの要素
         const playBtn = document.getElementById('play-audio-btn');
         const stopBtn = document.getElementById('stop-audio-btn');
         const audioStatus = document.getElementById('audio-status');
@@ -791,36 +812,19 @@
         const modalCancelBtn = document.getElementById('modal-cancel-btn');
         const modalConfirmBtn = document.getElementById('modal-confirm-btn');
 
-        // -------------------------------------------------------------
-        // シャッフルアルゴリズム (Fisher-Yates)
-        // -------------------------------------------------------------
-        function shuffleArray(array) {
-            let currentIndex = array.length, randomIndex;
-            while (currentIndex !== 0) {
-                randomIndex = Math.floor(Math.random() * currentIndex);
-                currentIndex--;
-                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
-            }
-            return array;
-        }
-
-        // -------------------------------------------------------------
-        // リセット＆再スタート処理
-        // -------------------------------------------------------------
         function resetAndRestart(isShuffle = false) {
             if (isPlaying) stopAudio();
             
+            let baseQuestions = [...originalQuestions];
             if (isShuffle) {
-                questions = shuffleArray([...originalQuestions]);
-            } else {
-                questions = [...originalQuestions];
+                baseQuestions = shuffleArray(baseQuestions);
             }
+            questions = prepareQuestions(baseQuestions);
             
             currentQuestion = 0;
             score = 0;
             userAnswers = new Array(questions.length).fill(null);
             
-            // セレクトボックスの再構築
             questionSelector.innerHTML = '';
             questions.forEach((_, index) => {
                 const option = document.createElement('option');
@@ -836,9 +840,6 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // -------------------------------------------------------------
-        // シャッフル用モーダルのイベント制御
-        // -------------------------------------------------------------
         shuffleBtn.onclick = () => {
             shuffleModal.classList.remove('hidden');
         };
@@ -856,9 +857,6 @@
             resetAndRestart(true); 
         };
 
-        // -------------------------------------------------------------
-        // 初期化: セレクトボックス生成
-        // -------------------------------------------------------------
         questions.forEach((_, index) => {
             const option = document.createElement('option');
             option.value = index;
@@ -911,6 +909,7 @@
             }
         }
 
+        // --- STREAMING_CHUNK:Finalizing logic and event listeners... ---
         function selectOption(selectedIndex) {
             userAnswers[currentQuestion] = selectedIndex;
             if (selectedIndex === questions[currentQuestion].answer) {
