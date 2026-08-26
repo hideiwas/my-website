@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ITIL 4 CDS 模擬試験 : EXAM CDS2 (全機能統合版)</title>
+    <title>ITIL 4 CDS 模擬試験 : EXAM CDS2 (完全機能版)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .slide-up { animation: slideUp 0.3s ease-out forwards; }
@@ -23,17 +23,20 @@
                 <h1 class="text-lg md:text-xl font-bold">CDS 模擬試験 : EXAM CDS2</h1>
             </div>
             
-            <!-- コントロールパネル (問題ジャンプ ＆ 音声再生) -->
             <div class="flex items-center gap-2 w-full md:w-auto overflow-x-auto pb-1 md:pb-0">
-                <!-- 任意の問題番号から開始する機能 -->
+                <!-- ジャンプ機能 -->
                 <div class="flex items-center bg-indigo-800/80 rounded-lg border border-indigo-400/30 px-2 py-1">
                     <span class="text-xs font-semibold mr-2 whitespace-nowrap text-indigo-100">ジャンプ:</span>
                     <select id="question-selector" class="bg-indigo-900 text-white text-sm rounded px-1 py-1 focus:outline-none focus:ring-2 focus:ring-emerald-400 cursor-pointer">
-                        <!-- JSでオプションを動的に生成します -->
                     </select>
                 </div>
 
                 <span id="progress-text" class="hidden sm:inline text-sm font-semibold bg-indigo-800/80 px-3 py-1.5 rounded-full border border-indigo-400/30 whitespace-nowrap"></span>
+                
+                <!-- ランダム出題機能 -->
+                <button id="shuffle-btn" class="flex-1 md:flex-none bg-amber-500 hover:bg-amber-400 text-white text-sm font-bold py-1.5 px-3 rounded-full shadow transition flex items-center justify-center gap-1 whitespace-nowrap ml-auto">
+                    <span>🔀 ランダム</span>
+                </button>
                 
                 <!-- 音声学習機能 -->
                 <button id="play-audio-btn" class="flex-1 md:flex-none bg-emerald-500 hover:bg-emerald-400 text-white text-sm font-bold py-1.5 px-3 rounded-full shadow transition flex items-center justify-center gap-1 whitespace-nowrap ml-auto">
@@ -45,17 +48,14 @@
             </div>
         </div>
         
-        <!-- Progress Bar -->
         <div class="w-full bg-slate-200 h-2">
             <div id="progress-bar" class="bg-emerald-500 h-2 transition-all duration-300" style="width: 0%;"></div>
         </div>
 
-        <!-- 音声再生中のステータス表示 -->
         <div id="audio-status" class="hidden bg-emerald-50 text-emerald-800 text-sm font-bold px-4 py-2 border-b border-emerald-200 text-center animate-pulse">
             🔊 現在、自動音声読み上げモードで再生中です...
         </div>
 
-        <!-- Question Area -->
         <div id="quiz-container" class="p-6 md:p-8 flex-1">
             <div class="flex items-center gap-2 mb-3">
                 <span id="question-badge" class="bg-indigo-100 text-indigo-800 text-xs font-bold px-2.5 py-1 rounded">問題</span>
@@ -63,20 +63,16 @@
             <h2 id="question-text" class="text-base md:text-lg font-semibold mb-6 leading-relaxed text-slate-900"></h2>
             
             <div id="options-container" class="space-y-3">
-                <!-- Options will be injected here -->
             </div>
 
-            <!-- Enhanced Explanation Area -->
             <div id="explanation-box" class="hidden mt-8 p-5 md:p-6 bg-slate-50 border-l-4 border-indigo-600 rounded-r-xl border border-slate-200 slide-up shadow-sm">
                 <div class="flex items-center gap-2 mb-3">
                     <span class="bg-indigo-600 text-white text-xs font-bold px-2 py-0.5 rounded">シラバス準拠 解説</span>
                 </div>
                 <div id="explanation-content" class="text-sm leading-relaxed text-slate-700 space-y-3">
-                    <!-- Dynamic explanation blocks -->
                 </div>
             </div>
 
-            <!-- Navigation Buttons -->
             <div class="mt-8 pt-5 border-t border-slate-200 flex flex-col-reverse sm:flex-row justify-between items-center gap-4">
                 <button id="prev-btn" class="hidden text-slate-500 hover:text-indigo-600 font-bold py-2 px-4 rounded transition flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -90,28 +86,46 @@
             </div>
         </div>
         
-        <!-- Result Screen -->
         <div id="result-container" class="hidden p-8 md:p-12 text-center my-auto">
             <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold">✓</div>
             <h2 class="text-2xl md:text-3xl font-bold text-slate-900 mb-2">演習完了</h2>
             <p class="text-slate-600 mb-6">全49問の回答と解説の確認が完了しました。</p>
             <div class="bg-slate-50 p-6 rounded-xl max-w-xs mx-auto border border-slate-200 mb-8">
                 <div class="text-xs text-slate-500 font-medium uppercase tracking-wider mb-1">正答率</div>
-                <div class="text-4xl font-extrabold text-indigo-600"><span id="score"></span> <span id="total-score" class="text-xl text-slate-400 font-normal"></span></div>
+                <div class="text-4xl font-extrabold text-indigo-600"><span id="score"></span> <span id="total-score" class="text-xl text-slate-400 font-normal">/ 49</span></div>
             </div>
-            <button onclick="location.reload()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition text-sm">もう一度挑戦する</button>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button onclick="location.reload()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition text-sm">もう一度挑戦する</button>
+                <button id="result-shuffle-btn" class="bg-amber-500 hover:bg-amber-400 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition text-sm">ランダム出題で再開</button>
+            </div>
+        </div>
+
+        <div id="shuffle-modal" class="hidden fixed inset-0 bg-slate-900/50 flex items-center justify-center z-50 px-4">
+            <div class="bg-white rounded-2xl shadow-2xl p-6 md:p-8 max-w-md w-full slide-up">
+                <h3 class="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2">
+                    <span class="text-amber-500 text-2xl">🔀</span> 問題をシャッフルしますか？
+                </h3>
+                <p class="text-slate-600 text-sm mb-6 leading-relaxed">
+                    ランダム出題モードをオンにして、問1からやり直します。<br>
+                    ※ 現在のスコアと解答履歴はリセットされます。
+                </p>
+                <div class="flex justify-end gap-3">
+                    <button id="modal-cancel-btn" class="px-5 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100 transition">キャンセル</button>
+                    <button id="modal-confirm-btn" class="px-5 py-2.5 rounded-lg text-sm font-bold text-white bg-amber-500 hover:bg-amber-600 shadow-md transition">シャッフルして開始</button>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        const questions = [
+        const originalQuestions = [
             {
                 question: "忙しいサービスプロバイダーは同時に多くのタスクや活動を行うため、作業を記録し追跡する手段を持つことが不可欠である。これは何の例か。",
                 options: [
-                    "サービスインテグレーションとマネジメント (SIAM)",
+                    "サービスインテグレーションとマネジメント",
                     "作業の優先度付け",
-                    "構築か購入か (Build vs Buy)",
-                    "チケットとしての作業の管理 (Managing work as tickets)"
+                    "構築か購入か",
+                    "チケットとしての作業の管理"
                 ],
                 answer: 3,
                 syllabus: "第5章：作業の優先順位付けと管理（5.1.1 チケットとしての作業の管理）",
@@ -122,7 +136,7 @@
                 question: "統合されるシステムが少なくリスクが低いシンプルなサービス実装に最も適しているが、複雑さのゆえにトラブルシューティングに課題をもたらす可能性がある統合アプローチはどれか。",
                 options: [
                     "パブリッシュ/サブスクライブ統合",
-                    "ビッグバン・アプローチ (Big Bang approach)",
+                    "ビッグバン・アプローチ",
                     "（バリュー）ストリームとの直接統合",
                     "インクリメンタル・デリバリー（段階的提供）"
                 ],
@@ -134,7 +148,7 @@
             {
                 question: "ある組織は、過去1ヶ月間に記録されたインシデントのレビューを行った。レビューの結果、インシデントの20%が「ユーザーエラー」に分類されていることが判明した。組織が正式な分析を行い、恒久的な解決を達成するために必要なアクションや対策を確立するのに役立つプラクティスはどれか。",
                 options: [
-                    "問題管理 (Problem management)",
+                    "問題管理",
                     "サービスデスク",
                     "モニタリングおよびイベント管理",
                     "ナレッジ管理"
@@ -149,7 +163,7 @@
                 options: [
                     "統合とデータ共有",
                     "スウォーミング",
-                    "情報モデル (An information model)",
+                    "情報モデル",
                     "シフトレフト"
                 ],
                 answer: 2,
@@ -175,7 +189,7 @@
                 options: [
                     "競争力のある価格設定",
                     "組織内部の効率性",
-                    "顧客のニーズと期待を満たすこと (Meeting customer needs and expectations)",
+                    "顧客のニーズと期待を満たすこと",
                     "利益の最大化"
                 ],
                 answer: 2,
@@ -189,7 +203,7 @@
                     "従業員満足度の測定",
                     "サービスインテグレーションとマネジメント",
                     "結果ベースの測定と報告",
-                    "シフトレフト (Shift-left)"
+                    "シフトレフト"
                 ],
                 answer: 3,
                 syllabus: "第5章：作業の優先順位付けと管理（5.1.5 シフトレフトアプローチ）",
@@ -240,7 +254,7 @@
                 options: [
                     "サービスデスクによって発行された満足度調査に回答するユーザーの割合",
                     "各スタッフが月に働いた平均時間",
-                    "各スタッフが完了したインシデント記録の品質 (The quality of incident records)",
+                    "各スタッフが完了したインシデント記録の品質",
                     "IT組織がインシデントの発生を検出するのにかかった平均時間"
                 ],
                 answer: 2,
@@ -251,7 +265,7 @@
             {
                 question: "サービスバリューチェーンのどのアクティビティが、アジャイル、DevOps、その他の標準、フレームワーク、および方法論をサポートするために必要なコンピテンシー（能力）を理解することに関与するか。",
                 options: [
-                    "計画 (Plan)",
+                    "計画",
                     "エンゲージ",
                     "改善",
                     "デザインおよびトランジション"
@@ -264,7 +278,7 @@
             {
                 question: "ワークフォースとタレント・マネジメント（要員計画とタレント・マネジメント）に関して、サービスバリューチェーンの「提供およびサポート (Deliver and support)」アクティビティの目的は何か。",
                 options: [
-                    "個人のパフォーマンスの測定 (Measurement of individual performance)",
+                    "個人のパフォーマンスの測定",
                     "新しい従業員および請負業者の獲得",
                     "個人の成長と昇進の計画",
                     "アジャイルとDevOpsに必要なコンピテンシーの特定"
@@ -279,7 +293,7 @@
                 options: [
                     "優先順位付け",
                     "情報モデル",
-                    "ソーシング戦略 (The sourcing strategy)",
+                    "ソーシング戦略",
                     "組織構造"
                 ],
                 answer: 2,
@@ -344,7 +358,7 @@
                 options: [
                     "インシデント管理",
                     "変更実現",
-                    "構成管理 (Configuration management)",
+                    "構成管理",
                     "サービス妥当性確認とテスト"
                 ],
                 answer: 2,
@@ -357,13 +371,13 @@
                 options: [
                     "サービス・エンパシー",
                     "カスタマー・ロイヤルティ",
-                    "サービス・マインドセット (Service mindset)",
+                    "サービス・マインドセット",
                     "共有された価値観"
                 ],
                 answer: 2,
                 syllabus: "第2章：組織文化とプロフェッショナリズム（2.3.6 サービス・マインドセット）",
-                rationale: "サービス・マインドセットとは、顧客に対する価値提供、信頼関係の醸成、およびロイヤルティ向上を常に意識して行動する組織的・個人的な姿勢（心構え）を指します。",
-                tips: "「価値・信頼・忠誠心の創造に焦点を当てる包括的な姿勢＝サービス・マインドセット」と定義されます。"
+                rationale: "サービス・マインドセットは、単に製品やサービスを提供するだけでなく、顧客体験を理解・改善し、顧客にとっての価値、組織へのロイヤルティ（忠誠心）、そして強固な「信頼関係」を創造することに重点を置く組織の姿勢です。",
+                tips: "サービス・マインドセットの三大要素＝「価値（Value）」「忠誠心（Loyalty）」「信頼（Trust）」です。"
             },
             {
                 question: "内部リソースと外部リソースの両方のスキルと可用性を考慮することが含まれるのはどれか。",
@@ -371,7 +385,7 @@
                     "スウォーミング",
                     "トリアージによる優先順位付け",
                     "シフトレフトのアプローチ",
-                    "構築か購入か (Build vs buy)"
+                    "構築か購入か"
                 ],
                 answer: 3,
                 syllabus: "第5章：ソーシングとサプライヤ管理（5.2.1 内製と外部調達の判断基準）",
@@ -383,7 +397,7 @@
                 options: [
                     "メッセージはメディアである",
                     "コミュニケーションは双方向のプロセスである",
-                    "私たちは皆、常にコミュニケーションをとっている (We’re all communicating, all the time)",
+                    "私たちは皆、常にコミュニケーションをとっている",
                     "タイミングと頻度が重要である"
                 ],
                 answer: 2,
@@ -395,7 +409,7 @@
                 question: "「共有された価値観（Shared values）」と「従うべき原則」が、サービス・マインドセットの一部として言及されているのはなぜか。",
                 options: [
                     "従業員に制限を課すため",
-                    "共通の目標に向けて組織を調整するため (To align the organization towards a common goal)",
+                    "共通の目標に向けて組織を調整するため",
                     "意思決定プロセスを複雑にするため",
                     "組織内の創造性を制限するため"
                 ],
@@ -410,7 +424,7 @@
                     "そのステップの下流にあるリソースのアイドル（待機）状態",
                     "ユーザー/顧客の期待を管理する必要性の増大",
                     "ボトルネックまたは制約の作成や移動",
-                    "作業アイテムの全体的な完了の迅速化 (Faster overall completion of work items)"
+                    "作業アイテムの全体的な完了の迅速化"
                 ],
                 answer: 3,
                 syllabus: "第5章：作業の優先順位付けと管理（5.1.3 部分最適と全体最適）",
@@ -462,7 +476,7 @@
                     "線形（リニア）な開発フレームワーク",
                     "リリース間の長い期間",
                     "リアクティブ（事後対応的）な戦術的作業",
-                    "本番環境向けのコードの頻繁な変更 (Frequent changes of code for the production environment)"
+                    "本番環境向けのコードの頻繁な変更"
                 ],
                 answer: 3,
                 syllabus: "第3章：情報と技術（3.7 CI/CDパイプラインの特徴）",
@@ -472,7 +486,7 @@
             {
                 question: "顧客や見込み客の心にポジティブで永続的な印象を与えるという目標を達成するために、組織が継続的に取り組む必要があるのは何か。",
                 options: [
-                    "顧客体験の継続的改善 (Continuous improvement of the customer experience)",
+                    "顧客体験の継続的改善",
                     "顧客満足度",
                     "市場での存在感の拡大",
                     "製品開発"
@@ -487,8 +501,8 @@
                 options: [
                     "サービス・エンパシー",
                     "カルチャー・フィット",
-                    "コラボレーション (Collaboration)",
-                    "協調 (Cooperation)"
+                    "コラボレーション",
+                    "協調"
                 ],
                 answer: 3,
                 syllabus: "第2章：協調とコラボレーションの違い（2.3.5 Cooperation vs Collaboration）",
@@ -513,7 +527,7 @@
                 options: [
                     "リソースの空き状況に基づいて優先順位を付ける",
                     "需要のソースまたはタイプに基づいて優先順位を付ける",
-                    "遅延コストと作業の所要時間（期間）を考慮する (Cost of delay and duration of work)",
+                    "遅延コストと作業の所要時間（期間）を考慮する",
                     "緊急性よりも経済的影響またはペナルティを考慮する"
                 ],
                 answer: 2,
@@ -527,7 +541,7 @@
                     "開発チームにインシデントが通知された順序",
                     "インシデントを提起した個人またはチームの好み",
                     "インシデントを解決するための開発チームのサプライヤの空き状況",
-                    "組織が製品を販売する能力への影響 (The impact on the organization's ability to sell its products)"
+                    "組織が製品を販売する能力への影響"
                 ],
                 answer: 3,
                 syllabus: "第5章：インシデントの優先順位付け原則（ビジネスインパクト）",
@@ -539,7 +553,7 @@
                 options: [
                     "新しい従業員と請負業者の獲得に焦点を当てる",
                     "リーダーシップによって提供される正式なメンタリング、エンゲージメント、および後継者育成計画の活動に従事する",
-                    "効果的で実行可能な人材（ピープル）戦略を作成する (To create an effective and actionable people strategy)",
+                    "効果的で実行可能な人材（ピープル）戦略を作成する",
                     "確立された職務役割に対する定期的なパフォーマンス評価の提供を測定する"
                 ],
                 answer: 2,
@@ -550,7 +564,7 @@
             {
                 question: "サービスバリューチェーンにおいて、タレント管理がリーダーシップと協力し、組織の戦略的方向性や、開発、テスト、運用、トレーニング、サポートの計画を理解するのは、どのフェーズか。",
                 options: [
-                    "計画 (Plan)",
+                    "計画",
                     "改善",
                     "エンゲージ",
                     "デザインおよびトランジション"
@@ -563,7 +577,7 @@
             {
                 question: "反復的で大量にあり、単純な意思決定ルールに基づくプロセスの自動化を支援する概念はどれか。",
                 options: [
-                    "ロボティック・プロセス・オートメーション (Robotic process automation / RPA)",
+                    "ロボティック・プロセス・オートメーション",
                     "CI/CD",
                     "統合とデータ共有",
                     "結果ベースの測定と報告"
@@ -574,7 +588,7 @@
                 tips: "「反復的（Repetitive）」「大量（High-volume）」「ルールベース（Rules-based）」の3点セットはRPAのキーワードです。"
             },
             {
-                question: "組織がソフトウェアを「購入」するのではなく「構築」すべき状況はどれか。",
+                question: "組織がソフトウェアを構築（自作）するのではなく、購入（Buy）すべき状況はどれか。",
                 options: [
                     "ソリューションが市販されておらず、定量化可能な競争優位性を提供するために適用できる内部リソースが組織にある場合",
                     "組織がソフトウェアをすぐに使用できるよう準備する必要がある場合",
@@ -605,7 +619,7 @@
                     "ホスティングサービスに必要なインフラストラクチャコンポーネントを設計し、潜在的なサプライヤを特定する",
                     "クラウドサービスの潜在的なユーザーのスキルと知識を特定し、トレーニングセッションを計画する",
                     "新しいスタッフ構造を計画し、ホスティングサービスの知識と経験を持つマネージャーを任命する",
-                    "採用を可能にするため、必要なスキルと知識セットを含む新スタッフの役割プロファイルを作成する (Create role profiles)"
+                    "採用を可能にするため、必要なスキルと知識セットを含む新スタッフの役割プロファイルを作成する"
                 ],
                 answer: 3,
                 syllabus: "第2章：組織と人材（2.2.3 要員計画戦略の構成要素）",
@@ -616,7 +630,7 @@
                 question: "効果的で価値のあるチームワークとサービス関係には、協調（Cooperation）とコラボレーション（Collaboration）が不可欠である。それらを区別する重要な要素はどれか。",
                 options: [
                     "高レベルの信頼",
-                    "共有された目標 (Shared goals)",
+                    "共有された目標",
                     "職務の分離",
                     "標準化された作業"
                 ],
@@ -631,7 +645,7 @@
                     "顧客志向",
                     "組織構造",
                     "従業員満足度の測定",
-                    "チーム文化 (Team culture)"
+                    "チーム文化"
                 ],
                 answer: 3,
                 syllabus: "第2章：組織と人材（2.3.1 チーム文化とダイナミクス）",
@@ -641,7 +655,7 @@
             {
                 question: "バリューストリームの「規制要件を理解し文書化する」ステップに直接関与【しない】プラクティスはどれか。",
                 options: [
-                    "変更実現 (Change enablement)",
+                    "変更実現",
                     "リレーションシップ管理",
                     "サービス構成管理",
                     "サービスポートフォリオ管理"
@@ -655,9 +669,9 @@
                 question: "予測を行い、推奨事項を生成するために、データの内容を自律的または半自律的に調査および変換するために【主に】使用される技術は何か。",
                 options: [
                     "統合されたサービス管理ツールセット",
-                    "ロボティック・プロセス・オートメーション (RPA)",
+                    "ロボティック・プロセス・オートメーション",
                     "CI/CD",
-                    "高度なアナリティクス (Advanced analytics)"
+                    "高度なアナリティクス"
                 ],
                 answer: 3,
                 syllabus: "第3章：情報と技術（3.2 高度なアナリティクスの活用）",
@@ -682,7 +696,7 @@
                 options: [
                     "顧客志向",
                     "サービス・エンパシー",
-                    "共有された価値観 (Shared values)",
+                    "共有された価値観",
                     "従うべき原則"
                 ],
                 answer: 2,
@@ -696,7 +710,7 @@
                     "ワークフォース計画",
                     "アジャイル・アプローチ",
                     "シフトレフト",
-                    "バリューストリーム・マッピング (Value stream mapping)"
+                    "バリューストリーム・マッピング"
                 ],
                 answer: 3,
                 syllabus: "第4章：バリューストリームの設計とマッピング（4.1.6 VSMの活用）",
@@ -708,11 +722,11 @@
                 options: [
                     "サービス・エンパシーの強化",
                     "市場の支配",
-                    "忠誠心（ロイヤルティ）と信頼の創造 (Creating loyalty and trust)",
+                    "忠誠心（ロイヤルティ）と信頼の創造",
                     "費用の削減"
                 ],
                 answer: 2,
-                syllabus: "第2章：顧客体験とサービス・マインドセット",
+                syllabus: "第2章：サービス・マインドセットと顧客体験（CX）",
                 rationale: "顧客体験（CX）を磨き続ける真の目的は、顧客の期待に応え続け、組織に対する強固な「忠誠心（ロイヤルティ）と信頼」を獲得・維持することにあります。",
                 tips: "CX改善の最終ゴールは「ロイヤルティと信頼の獲得」です。"
             },
@@ -743,11 +757,12 @@
                 tips: "「階層型組織の打破」「部門横断（クロスファンクショナル）」「マトリックス構造」「マルチスキル」がスウォーミング導入の理想的コンテキストです。"
             }
         ];
-
+        let questions = [...originalQuestions];
         let currentQuestion = 0;
         let score = 0;
         let userAnswers = new Array(questions.length).fill(null);
         
+        // --- 音声再生用の変数 ---
         let isPlaying = false;
         let utterance = new SpeechSynthesisUtterance();
         utterance.lang = 'ja-JP';
@@ -764,11 +779,86 @@
         const resultContainer = document.getElementById('result-container');
         const qBadge = document.getElementById('question-badge');
         
+        // 音声UIとセレクトボックスの要素
         const playBtn = document.getElementById('play-audio-btn');
         const stopBtn = document.getElementById('stop-audio-btn');
         const audioStatus = document.getElementById('audio-status');
         const questionSelector = document.getElementById('question-selector');
+        
+        const shuffleBtn = document.getElementById('shuffle-btn');
+        const resultShuffleBtn = document.getElementById('result-shuffle-btn');
+        const shuffleModal = document.getElementById('shuffle-modal');
+        const modalCancelBtn = document.getElementById('modal-cancel-btn');
+        const modalConfirmBtn = document.getElementById('modal-confirm-btn');
 
+        // -------------------------------------------------------------
+        // シャッフルアルゴリズム (Fisher-Yates)
+        // -------------------------------------------------------------
+        function shuffleArray(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex !== 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        // -------------------------------------------------------------
+        // リセット＆再スタート処理
+        // -------------------------------------------------------------
+        function resetAndRestart(isShuffle = false) {
+            if (isPlaying) stopAudio();
+            
+            if (isShuffle) {
+                questions = shuffleArray([...originalQuestions]);
+            } else {
+                questions = [...originalQuestions];
+            }
+            
+            currentQuestion = 0;
+            score = 0;
+            userAnswers = new Array(questions.length).fill(null);
+            
+            // セレクトボックスの再構築
+            questionSelector.innerHTML = '';
+            questions.forEach((_, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.text = `問 ${index + 1}`;
+                questionSelector.appendChild(option);
+            });
+            
+            quizContainer.classList.remove('hidden');
+            resultContainer.classList.add('hidden');
+            
+            loadQuestion();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // -------------------------------------------------------------
+        // シャッフル用モーダルのイベント制御
+        // -------------------------------------------------------------
+        shuffleBtn.onclick = () => {
+            shuffleModal.classList.remove('hidden');
+        };
+
+        modalCancelBtn.onclick = () => {
+            shuffleModal.classList.add('hidden');
+        };
+
+        modalConfirmBtn.onclick = () => {
+            shuffleModal.classList.add('hidden');
+            resetAndRestart(true); 
+        };
+        
+        resultShuffleBtn.onclick = () => {
+            resetAndRestart(true); 
+        };
+
+        // -------------------------------------------------------------
+        // 初期化: セレクトボックス生成
+        // -------------------------------------------------------------
         questions.forEach((_, index) => {
             const option = document.createElement('option');
             option.value = index;
@@ -784,6 +874,8 @@
         });
 
         function loadQuestion() {
+            if (questions.length === 0) return;
+
             const q = questions[currentQuestion];
             qBadge.innerText = `問 ${currentQuestion + 1} / ${questions.length}`;
             qText.innerHTML = q.question.replace(/\n/g, '<br>');
@@ -812,7 +904,7 @@
                     btn.innerHTML = `<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-slate-100 text-slate-600 text-xs font-bold shrink-0 mt-0.5">${String.fromCharCode(65 + index)}</span> <span>${opt}</span>`;
                     btn.onclick = () => {
                         if (isPlaying) stopAudio();
-                        selectOption(index, btn);
+                        selectOption(index);
                     };
                     optionsContainer.appendChild(btn);
                 });
