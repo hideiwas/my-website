@@ -1,28 +1,113 @@
-<style>
-.cds-button {
-    display: block;
-    width: 90%;
-    max-width: 500px;
-    margin: 12px auto;
-    padding: 16px 0;
-    text-align: center;
-    font-size: 20px;
-    font-weight: bold;
-    color: white;
-    background-color: #007bff;
-    text-decoration: none;
-    border-radius: 10px;
-    box-sizing: border-box;
-}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ITIL 4 CDS 模擬試験 総合ポータル</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* タップ時のハイライトを無効化し、独自のアニメーションを活かす */
+        * { -webkit-tap-highlight-color: transparent; }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen p-4 md:p-8">
 
-.cds-button:active {
-    background-color: #0056b3;
-}
-</style>
+    <div class="max-w-6xl mx-auto">
+        <!-- ヘッダーエリア -->
+        <header class="text-center mb-10 md:mb-14 pt-4 md:pt-8">
+            <div class="inline-block bg-indigo-100 text-indigo-800 text-sm font-extrabold px-4 py-1.5 rounded-full mb-4 tracking-wider">
+                ITIL 4 SPECIALIST
+            </div>
+            <h1 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-slate-900 mb-4 tracking-tight">
+                CDS 模擬試験 ポータル
+            </h1>
+            <p class="text-slate-600 font-medium md:text-lg">
+                Create, Deliver and Support 試験対策<br class="md:hidden">（全6セット / 総計299問）
+            </p>
+        </header>
 
-<a href="CDS1.html" target="_blank" class="cds-button">CDS1</a>
-<a href="CDS2.html" target="_blank" class="cds-button">CDS2</a>
-<a href="CDS3.html" target="_blank" class="cds-button">CDS3</a>
-<a href="CDS4.html" target="_blank" class="cds-button">CDS4</a>
-<a href="CDS5.html" target="_blank" class="cds-button">CDS5</a>
-<a href="CDS6.html" target="_blank" class="cds-button">CDS6</a>
+        <!-- メイングリッド（スマホ1列、タブレット2列、PC3列） -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-8">
+
+            <!-- CDS 1 -->
+            <div class="bg-white rounded-2xl shadow-sm hover:shadow-xl border border-slate-200 p-6 flex flex-col transition-all duration-300 transform hover:-translate-y-1">
+                <div class="flex justify-between items-start mb-4">
+                    <h2 class="text-2xl font-bold text-slate-800 tracking-tight">EXAM CDS1</h2>
+                    <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-3 py-1.5 rounded-full">全52問</span>
+                </div>
+                <p class="text-slate-500 text-sm mb-6 flex-grow leading-relaxed">バリューストリームの基礎、組織構造、シフトレフトなどの基本概念を中心に構成されたセットです。</p>
+                <a href="CDS1.html" class="block w-full bg-indigo-600 hover:bg-indigo-700 text-white text-center font-bold text-lg py-3.5 px-4 rounded-xl shadow-md active:scale-95 transition-all">
+                    学習を開始する
+                </a>
+            </div>
+
+            <!-- CDS 2 -->
+            <div class="bg-white rounded-2xl shadow-sm hover:shadow-xl border border-slate-200 p-6 flex flex-col transition-all duration-300 transform hover:-translate-y-1">
+                <div class="flex justify-between items-start mb-4">
+                    <h2 class="text-2xl font-bold text-slate-800 tracking-tight">EXAM CDS2</h2>
+                    <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-3 py-1.5 rounded-full">全49問</span>
+                </div>
+                <p class="text-slate-500 text-sm mb-6 flex-grow leading-relaxed">情報の流れ、ツール統合、SIAMやBuild vs Buyなどのソーシング戦略の実践的なシナリオ問題を含みます。</p>
+                <a href="CDS2.html" class="block w-full bg-indigo-600 hover:bg-indigo-700 text-white text-center font-bold text-lg py-3.5 px-4 rounded-xl shadow-md active:scale-95 transition-all">
+                    学習を開始する
+                </a>
+            </div>
+
+            <!-- CDS 3 -->
+            <div class="bg-white rounded-2xl shadow-sm hover:shadow-xl border border-slate-200 p-6 flex flex-col transition-all duration-300 transform hover:-translate-y-1">
+                <div class="flex justify-between items-start mb-4">
+                    <h2 class="text-2xl font-bold text-slate-800 tracking-tight">EXAM CDS3</h2>
+                    <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-3 py-1.5 rounded-full">全49問</span>
+                </div>
+                <p class="text-slate-500 text-sm mb-6 flex-grow leading-relaxed">作業の優先順位付け（WSJF、FIFO）、スウォーミング、CI/CDなどの技術プラクティスを深掘りします。</p>
+                <a href="CDS3.html" class="block w-full bg-indigo-600 hover:bg-indigo-700 text-white text-center font-bold text-lg py-3.5 px-4 rounded-xl shadow-md active:scale-95 transition-all">
+                    学習を開始する
+                </a>
+            </div>
+
+            <!-- CDS 4 -->
+            <div class="bg-white rounded-2xl shadow-sm hover:shadow-xl border border-slate-200 p-6 flex flex-col transition-all duration-300 transform hover:-translate-y-1">
+                <div class="flex justify-between items-start mb-4">
+                    <h2 class="text-2xl font-bold text-slate-800 tracking-tight">EXAM CDS4</h2>
+                    <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-3 py-1.5 rounded-full">全50問</span>
+                </div>
+                <p class="text-slate-500 text-sm mb-6 flex-grow leading-relaxed">価値の創造、アウトサイド・イン・アプローチ、顧客志向やサービスマインドセットなどの組織文化に焦点を当てます。</p>
+                <a href="CDS4.html" class="block w-full bg-indigo-600 hover:bg-indigo-700 text-white text-center font-bold text-lg py-3.5 px-4 rounded-xl shadow-md active:scale-95 transition-all">
+                    学習を開始する
+                </a>
+            </div>
+
+            <!-- CDS 5 -->
+            <div class="bg-white rounded-2xl shadow-sm hover:shadow-xl border border-slate-200 p-6 flex flex-col transition-all duration-300 transform hover:-translate-y-1">
+                <div class="flex justify-between items-start mb-4">
+                    <h2 class="text-2xl font-bold text-slate-800 tracking-tight">EXAM CDS5</h2>
+                    <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-3 py-1.5 rounded-full">全47問</span>
+                </div>
+                <p class="text-slate-500 text-sm mb-6 flex-grow leading-relaxed">高度なアナリティクス、RPA、機械学習などの新技術の適用と、バリューストリーム設計の原則をテストします。</p>
+                <a href="CDS5.html" class="block w-full bg-indigo-600 hover:bg-indigo-700 text-white text-center font-bold text-lg py-3.5 px-4 rounded-xl shadow-md active:scale-95 transition-all">
+                    学習を開始する
+                </a>
+            </div>
+
+            <!-- CDS 6 -->
+            <div class="bg-white rounded-2xl shadow-sm hover:shadow-xl border border-slate-200 p-6 flex flex-col transition-all duration-300 transform hover:-translate-y-1">
+                <div class="flex justify-between items-start mb-4">
+                    <h2 class="text-2xl font-bold text-slate-800 tracking-tight">EXAM CDS6</h2>
+                    <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-3 py-1.5 rounded-full">全52問</span>
+                </div>
+                <p class="text-slate-500 text-sm mb-6 flex-grow leading-relaxed">総仕上げセット。従業員フィードバック、リーダーシップ、インシデント管理の実践など総合的な理解を問います。</p>
+                <a href="CDS6.html" class="block w-full bg-indigo-600 hover:bg-indigo-700 text-white text-center font-bold text-lg py-3.5 px-4 rounded-xl shadow-md active:scale-95 transition-all">
+                    学習を開始する
+                </a>
+            </div>
+
+        </div>
+
+        <!-- フッター -->
+        <footer class="mt-16 text-center text-slate-400 text-sm font-medium pb-8">
+            <p>※ 各試験ファイル（CDS1.html 等）が同じフォルダ内にあることを確認してご利用ください。</p>
+        </footer>
+    </div>
+
+</body>
+</html>
