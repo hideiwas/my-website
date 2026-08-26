@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ITIL 4 CDS 模擬試験 : EXAM CDS5 (完全機能版)</title>
+    <title>ITIL 4 CDS 模擬試験 : EXAM CDS5 (完全版)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .slide-up { animation: slideUp 0.3s ease-out forwards; }
@@ -729,12 +729,36 @@
             }
         ];
 
-        let questions = [...originalQuestions];
+        // --- STREAMING_CHUNK:Implementing option shuffle and logic ---
+        function shuffleArray(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex !== 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        function prepareQuestions(baseQuestions) {
+            return baseQuestions.map(q => {
+                let optionsWithIndex = q.options.map((opt, index) => ({ text: opt, originalIndex: index }));
+                // 選択肢の順番をランダムにシャッフル
+                for (let i = optionsWithIndex.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [optionsWithIndex[i], optionsWithIndex[j]] = [optionsWithIndex[j], optionsWithIndex[i]];
+                }
+                // シャッフル後の正解インデックスを特定
+                const newAnswerIndex = optionsWithIndex.findIndex(o => o.originalIndex === q.answer);
+                return { ...q, options: optionsWithIndex.map(o => o.text), answer: newAnswerIndex };
+            });
+        }
+
+        let questions = prepareQuestions([...originalQuestions]);
         let currentQuestion = 0;
         let score = 0;
         let userAnswers = new Array(questions.length).fill(null);
         
-        // --- 音声再生用の変数 ---
         let isPlaying = false;
         let utterance = new SpeechSynthesisUtterance();
         utterance.lang = 'ja-JP';
@@ -751,7 +775,6 @@
         const resultContainer = document.getElementById('result-container');
         const qBadge = document.getElementById('question-badge');
         
-        // 音声UIとセレクトボックスの要素
         const playBtn = document.getElementById('play-audio-btn');
         const stopBtn = document.getElementById('stop-audio-btn');
         const audioStatus = document.getElementById('audio-status');
@@ -763,24 +786,14 @@
         const modalCancelBtn = document.getElementById('modal-cancel-btn');
         const modalConfirmBtn = document.getElementById('modal-confirm-btn');
 
-        function shuffleArray(array) {
-            let currentIndex = array.length, randomIndex;
-            while (currentIndex !== 0) {
-                randomIndex = Math.floor(Math.random() * currentIndex);
-                currentIndex--;
-                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
-            }
-            return array;
-        }
-
         function resetAndRestart(isShuffle = false) {
             if (isPlaying) stopAudio();
             
+            let baseQuestions = [...originalQuestions];
             if (isShuffle) {
-                questions = shuffleArray([...originalQuestions]);
-            } else {
-                questions = [...originalQuestions];
+                baseQuestions = shuffleArray(baseQuestions);
             }
+            questions = prepareQuestions(baseQuestions);
             
             currentQuestion = 0;
             score = 0;
@@ -870,6 +883,7 @@
             }
         }
 
+        // --- STREAMING_CHUNK:Finalizing logic and event listeners... ---
         function selectOption(selectedIndex) {
             userAnswers[currentQuestion] = selectedIndex;
             if (selectedIndex === questions[currentQuestion].answer) {
