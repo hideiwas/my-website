@@ -48,14 +48,17 @@
             </div>
         </div>
         
+        <!-- Progress Bar -->
         <div class="w-full bg-slate-200 h-2">
             <div id="progress-bar" class="bg-emerald-500 h-2 transition-all duration-300" style="width: 0%;"></div>
         </div>
 
+        <!-- 音声再生中のステータス表示 -->
         <div id="audio-status" class="hidden bg-emerald-50 text-emerald-800 text-sm font-bold px-4 py-2 border-b border-emerald-200 text-center animate-pulse">
             🔊 現在、自動音声読み上げモードで再生中です...
         </div>
 
+        <!-- Question Area -->
         <div id="quiz-container" class="p-6 md:p-8 flex-1">
             <div class="flex items-center gap-2 mb-3">
                 <span id="question-badge" class="bg-indigo-100 text-indigo-800 text-xs font-bold px-2.5 py-1 rounded">問題</span>
@@ -65,6 +68,7 @@
             <div id="options-container" class="space-y-3">
             </div>
 
+            <!-- Explanation Area -->
             <div id="explanation-box" class="hidden mt-8 p-5 md:p-6 bg-slate-50 border-l-4 border-indigo-600 rounded-r-xl border border-slate-200 slide-up shadow-sm">
                 <div class="flex items-center gap-2 mb-3">
                     <span class="bg-indigo-600 text-white text-xs font-bold px-2 py-0.5 rounded">シラバス準拠 解説</span>
@@ -73,6 +77,7 @@
                 </div>
             </div>
 
+            <!-- Navigation Buttons -->
             <div class="mt-8 pt-5 border-t border-slate-200 flex flex-col-reverse sm:flex-row justify-between items-center gap-4">
                 <button id="prev-btn" class="hidden text-slate-500 hover:text-indigo-600 font-bold py-2 px-4 rounded transition flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -86,6 +91,7 @@
             </div>
         </div>
         
+        <!-- Result Screen -->
         <div id="result-container" class="hidden p-8 md:p-12 text-center my-auto">
             <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold">✓</div>
             <h2 class="text-2xl md:text-3xl font-bold text-slate-900 mb-2">演習完了</h2>
@@ -100,6 +106,7 @@
             </div>
         </div>
 
+        <!-- シャッフル確認モーダル -->
         <div id="shuffle-modal" class="hidden fixed inset-0 bg-slate-900/50 flex items-center justify-center z-50 px-4">
             <div class="bg-white rounded-2xl shadow-2xl p-6 md:p-8 max-w-md w-full slide-up">
                 <h3 class="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2">
@@ -136,7 +143,7 @@
                 question: "リーンおよびアジャイルソフトウェア開発の哲学の中心となる、主にソフトウェアエンジニアリングに関連するプラクティスのコレクションを指す概念はどれか。",
                 options: [
                     "統合とデータ共有",
-                    "CI/CD (継続的インテグレーション/継続的デリバリー/継続的デプロイメント)",
+                    "CI/CD",
                     "組織構造",
                     "サービスインテグレーションとマネジメント"
                 ],
@@ -161,7 +168,7 @@
             {
                 question: "ある組織が新しいサービスを導入したいと考えている。サービスの設計、開発、移行に貢献する多くのチームがある。この新しいサービスのバリューストリームを作成する際、組織はどのアプローチに従うべきか。",
                 options: [
-                    "「4つの側面」が等しく考慮されるように、プラクティス、人材、ツール、サプライヤごとに別々のバリューストリームを作成する",
+                    "プラクティス、人材、ツール、サプライヤごとに別々のバリューストリームを作成する",
                     "チームが異なる目標に集中できるように、チームごとに1つのバリューストリームを作成する",
                     "サービスのエンドツーエンドの包括的なビジョンを可能にするため、プロジェクト全体で1つのバリューストリームを作成する",
                     "各マイルストーンがアジャイルな方法で確実に達成されるように、プロジェクトのフェーズごとに別々のバリューストリームを作成する"
@@ -219,7 +226,7 @@
                     "新規および変更されたコンポーネント、製品、およびサービスが合意された基準を満たすことを確実にする"
                 ],
                 answer: 0,
-                syllabus: "第4章：主要プラクティス / 展開管理 (Deployment Management)",
+                syllabus: "第4章：主要プラクティス / 展開管理",
                 rationale: "展開管理プラクティスには「組織全体にわたるサービスおよびサービス・コンポーネントの展開に対する効果的なアプローチを確立および維持すること」「バリューストリームのコンテキストにおいて、効果的な展開を確実に行うこと」というPSFが含まれます。",
                 tips: "「変更の悪影響の最小化」は変更実現、「合意基準を満たすこと」は妥当性確認とテストの目的です。"
             },
@@ -228,13 +235,13 @@
                 options: [
                     "サービス",
                     "不可欠な",
-                    "結果主導の",
-                    "顧客"
+                    "顧客",
+                    "結果主導の"
                 ],
-                answer: 2,
+                answer: 3,
                 syllabus: "第4章：サービス・デザイン・プラクティス",
                 rationale: "ITIL 4のサービス・デザインは、単にドキュメントを作るだけでなく、組織や顧客にとっての望ましい「成果（アウトカム）」に焦点を当てる『結果主導（results-driven）』のアプローチを重視しています。",
-                tips: "デザインフェーズで重要なのは、プロセスや技術そのものではなく、最終的な「成果・結果」に結びつけるアプローチです。"
+                tips: "デザインフェーズで重要なのは、プロセスや技術そのものではなく、最終的な「成果・結果（Results）」に結びつけるアプローチです。"
             },
             {
                 question: "「シフトレフト」の利点は何か。",
@@ -260,7 +267,7 @@
                 answer: 1,
                 syllabus: "第4章：バリューストリーム・マッピング（4.1.6 VSMの目的）",
                 rationale: "VSMはフローを視覚化（マッピング）して時間を測定しますが、それはあくまで「手段」です。最終的な「目的」は、視覚化されたフローの中から非付加価値作業（無駄/Waste）を特定し、それを排除して顧客価値を最大化することです。",
-                tips: "可視化や測定は手段です。VSMの最大の目的は「無駄」の特定と排除です。"
+                tips: "可視化や測定は手段です。VSMの最大の目的は「無駄（Waste）の特定と排除」です。"
             },
             {
                 question: "電話でサービスデスクチームに連絡した際の「サービスのスピード」に関して、顧客から大量の苦情が寄せられている。顧客はしばしば、サービスデスク担当者がチケットの情報を記録するのに多くの時間を費やしているとコメントしている。この状況に対処するのに役立つ概念またはアプローチはどれか。",
@@ -285,7 +292,7 @@
                 ],
                 answer: 3,
                 syllabus: "第2章：組織と人材（2.3 プロフェッショナリズムと顧客志向）",
-                rationale: "顧客志向とは、販売および顧客関係に対するアプローチであり、スタッフは顧客が長期的なニーズや欲求を満たせるように支援することに焦点を当てます。",
+                rationale: "顧客志向（Customer Orientation）とは、販売および顧客関係に対するアプローチであり、スタッフは顧客が長期的なニーズや欲求を満たせるように支援することに焦点を当てます。",
                 tips: "「長期的なニーズ」というフレーズは「顧客志向」の定義そのものです。"
             },
             {
@@ -377,10 +384,10 @@
                 answer: 1,
                 syllabus: "第4章：バリューストリームの設計（4.1.3 バリューストリームの構造）",
                 rationale: "完全なバリューストリームは、常に「需要（Demand）や機会」をトリガーとして始まり、最終的にステークホルダーへの「価値（Value）」の創造または回復で終わる一連のフローでなければなりません。",
-                tips: "「需要」から始まり「価値」で終わるシナリオのみが『完全な』バリューストリームです。"
+                tips: "「需要（Demand）」から始まり「価値（Value）」で終わるシナリオのみが『完全な』バリューストリームです。"
             },
             {
-                question: "顧客志向が主に関与するものは何か。",
+                question: "顧客志向（Customer orientation）が主に関与するものは何か。",
                 options: [
                     "競合他社の作業慣行を無視する",
                     "顧客満足度を中心にして個人とチームの目標を調整する",
@@ -415,7 +422,7 @@
                 ],
                 answer: 0,
                 syllabus: "第2章：要員計画とサービスバリューチェーン（Plan活動における人材管理）",
-                rationale: "サービスバリューチェーンの「計画」フェーズにおいて、タレント管理はリーダーシップと協力して組織の戦略的方向性を理解し、計画との整合性を確保する必要があります。このフェーズでは、サービスの方向性を設定し、目標を定義し、リソースを計画します。",
+                rationale: "サービスバリューチェーンの「計画（Plan）」フェーズにおいて、タレント管理はリーダーシップと協力して組織の戦略的方向性を理解し、計画との整合性を確保する必要があります。このフェーズでは、サービスの方向性を設定し、目標を定義し、リソースを計画します。",
                 tips: "「戦略的方向性の理解」「計画との整合」はすべて「Plan」活動で行われます。"
             },
             {
@@ -467,7 +474,7 @@
                 ],
                 answer: 0,
                 syllabus: "第2章：組織と人材（2.3.6 サービス・エンパシー）",
-                rationale: "サービス・エンパシー（共感）は、単に相手を可哀想に思う同情とは異なり、相手の視点に立って感情やニーズを論理的に理解・予測し、プロフェッショナルとして問題解決や関係改善に活かす能力です。",
+                rationale: "サービス・エンパシー（共感）は、単に相手を可哀想に思う同情（Sympathy）とは異なり、相手の視点に立って感情やニーズを論理的に理解・予測し、プロフェッショナルとして問題解決や関係改善に活かす能力です。",
                 tips: "「認識し、理解し、予測する」能力は単なる同情ではなく「共感」です。"
             },
             {
@@ -533,7 +540,7 @@
                 answer: 3,
                 syllabus: "第3章：情報と技術（3.7 CI/CDの定義）",
                 rationale: "「継続的デリバリー」は継続的インテグレーションのアクティビティを拡張し、本番環境への展開の最終段階をカバーします。これは構築されたソフトウェアが「いつでも本番環境にリリースできる状態」であることを意味しますが、実際のリリースには手動の承認が伴うことが特徴です。",
-                tips: "手動確認（承認）がある＝デリバリー（Delivery）。全て自動で本番展開＝デプロイメント（Deployment）です。"
+                tips: "手動確認（承認）がある＝デリバリー。全て自動で本番展開＝デプロイメントです。"
             },
             {
                 question: "統制、権限の所在、または技術的領域に基づいてリソースを配置する組織構造の形態はどれか。",
@@ -545,7 +552,7 @@
                 ],
                 answer: 1,
                 syllabus: "第2章：組織と人材（2.1.1 組織構造の種類）",
-                rationale: "機能型構造は、「通常、組織の統制、権限の所在、または技術的領域に基づいた階層的な配置」です。これらの配置により、権限、役割、責任がどのように割り当てられ、作業が管理されるかが決定されます。",
+                rationale: "機能型（Functional）構造は、「通常、組織の統制、権限の所在、または技術的領域に基づいた階層的な配置」です。これらの配置により、権限、役割、責任がどのように割り当てられ、作業が管理されるかが決定されます。",
                 tips: "技術領域ごと（サーバーチーム、NWチームなど）に階層化された伝統的構造を「機能型構造」と呼びます。"
             },
             {
@@ -571,7 +578,7 @@
                 ],
                 answer: 2,
                 syllabus: "第2章：組織と人材（2.3.5 コラボレーションと協調）",
-                rationale: "ITIL 4の定義では、各自が異なる目標を持ちながら調整することを「協調」、全員が共通の目標に向かって一体となって作業することを「コラボレーション」と明確に区別しています。",
+                rationale: "ITIL 4の定義では、各自が異なる目標を持ちながら調整することを「協調（Cooperation）」、全員が共通の目標（Shared goals）に向かって一体となって作業することを「コラボレーション（Collaboration）」と明確に区別しています。",
                 tips: "「共有目標」というキーワードが出れば必ず「コラボレーション」です。"
             },
             {
@@ -610,7 +617,7 @@
                 ],
                 answer: 0,
                 syllabus: "第2章：組織と人材（2.3.7 コミュニケーションの原則）",
-                rationale: "優れた人間のコミュニケーションとは、効率的で、反応が良く、プロフェッショナルで、効果的であることです。不必要な問題やストレスを避けるポジティブな関係を確立すること（ポジティブなコミュニケーションの価値）によって強化されます。",
+                rationale: "「ポジティブなコミュニケーション」は、単なる情報の伝達ではなく、相手の感情や知的なニーズを思いやり、ストレスや誤解を避ける良好な関係（信頼基盤）を築くことに重点を置きます。",
                 tips: "「知的および感情的なニーズ」への配慮＝ポジティブなコミュニケーションです。"
             },
             {
@@ -623,7 +630,7 @@
                 ],
                 answer: 1,
                 syllabus: "第2章：組織と人材（2.2.5 測定と報告へのアプローチ）",
-                rationale: "結果ベースのアプローチは、従業員の行動の「結果（アウトカム）」のみに焦点を当てます。たとえば、顧客体験、成功したリリース、月の売上、可用性などです。行動（時間や量）ではなく成果を測ります。",
+                rationale: "結果ベースのアプローチは、従業員の行動の「結果（アウトカム）」のみに焦点を当てます。たとえば、顧客体験、成功したリリース、可用性などです。行動（時間や量）ではなく成果を測ります。",
                 tips: "時間や労力（対応時間、労働時間）は「活動（プロセス）ベース」の指標です。「可用性」などの最終的な提供価値が「結果ベース」です。"
             },
             {
@@ -636,7 +643,7 @@
                 ],
                 answer: 0,
                 syllabus: "第5章：作業の優先順位付けと管理（5.1.4 スウォーミング）",
-                rationale: "スウォーミングは、作業を継続するのに最適な人物が明らかになるまで、様々な専門リソースやステークホルダーが「群れ」となって1つのアイテムに取り組み、特定された時点で他のメンバーが解放されるという作業管理手法です。",
+                rationale: "スウォーミングは、階層型エスカレーションによるチケットのたらい回しやキュー滞留を防ぐため、様々な専門家が最初から「群れ」となって問題に協力して取り組み、解決可能な人が見つかるまで共に活動する手法です。",
                 tips: "「階層型サポートの課題（たらい回し・キューの増大）の解決策」＝スウォーミングです。"
             },
             {
@@ -650,7 +657,7 @@
                 answer: 0,
                 syllabus: "第2章：組織と人材（2.3.1 チーム文化）",
                 rationale: "チーム文化は個人に強制することはできません。リーダーの最も重要なタスクは、ビジョンとそれがチームによってどのように達成されるかを明確に伝えることです。チームメンバーは、自分の貢献が全体像にどう当てはまるかを理解する必要があり、それが目的意識と帰属意識をもたらします。",
-                tips: "「組織目標との整合（アラインメント）」「目的意識の共有」が良い文化の土台です。"
+                tips: "「組織目標との整合」「目的意識の共有」が良い文化の土台です。"
             },
             {
                 question: "サービスの保守・改善のバリューストリームで、「サービス妥当性確認とテスト」の関与を計画している。サービスの信頼性に影響を与えないことが重要で、機能テストは計画済みである。この計画から欠けている活動はどれか。",
@@ -666,7 +673,7 @@
                 tips: "変更による副作用を防ぐ「回帰テスト」の概念を指す選択肢を選びます。"
             },
             {
-                question: "作業の優先順位付けにおいて、「先入れ先出し (first-in, first-out / FIFO)」の手法は何を意味するか。",
+                question: "作業の優先順位付けにおいて、「先入れ先出し」の手法は何を意味するか。",
                 options: [
                     "最も新しい待機アイテムが次に処理される",
                     "最も処理が早いアイテムが次に処理される",
@@ -734,7 +741,7 @@
                 question: "効果的な情報モデルの主要な要素では【ない】ものはどれか。",
                 options: [
                     "組織のテクノロジとビジネスサービスの主要コンポーネントの構造的表現、およびその関係",
-                    "ロボティック・プロセス・オートメーション (RPA) の機能",
+                    "ロボティック・プロセス・オートメーションの機能",
                     "組織内の重要な事実、用語、活動、プラクティスの定義",
                     "統合およびデータ共有の方法論"
                 ],
@@ -796,13 +803,37 @@
                 tips: "「コミュニケーション」「アプローチの共有」「利益を売り込む」活動はイニシアチブ設定（準備段階）で行われます。"
             }
         ];
-        
-        let questions = [...originalQuestions];
+
+        // --- STREAMING_CHUNK:Implementing option shuffle and logic ---
+        function shuffleArray(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex !== 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        function prepareQuestions(baseQuestions) {
+            return baseQuestions.map(q => {
+                let optionsWithIndex = q.options.map((opt, index) => ({ text: opt, originalIndex: index }));
+                // 選択肢の順番をランダムにシャッフル
+                for (let i = optionsWithIndex.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [optionsWithIndex[i], optionsWithIndex[j]] = [optionsWithIndex[j], optionsWithIndex[i]];
+                }
+                // シャッフル後の正解インデックスを特定
+                const newAnswerIndex = optionsWithIndex.findIndex(o => o.originalIndex === q.answer);
+                return { ...q, options: optionsWithIndex.map(o => o.text), answer: newAnswerIndex };
+            });
+        }
+
+        let questions = prepareQuestions([...originalQuestions]);
         let currentQuestion = 0;
         let score = 0;
         let userAnswers = new Array(questions.length).fill(null);
         
-        // --- 音声再生用の変数 ---
         let isPlaying = false;
         let utterance = new SpeechSynthesisUtterance();
         utterance.lang = 'ja-JP';
@@ -819,7 +850,6 @@
         const resultContainer = document.getElementById('result-container');
         const qBadge = document.getElementById('question-badge');
         
-        // 音声UIとセレクトボックスの要素
         const playBtn = document.getElementById('play-audio-btn');
         const stopBtn = document.getElementById('stop-audio-btn');
         const audioStatus = document.getElementById('audio-status');
@@ -831,36 +861,19 @@
         const modalCancelBtn = document.getElementById('modal-cancel-btn');
         const modalConfirmBtn = document.getElementById('modal-confirm-btn');
 
-        // -------------------------------------------------------------
-        // シャッフルアルゴリズム (Fisher-Yates)
-        // -------------------------------------------------------------
-        function shuffleArray(array) {
-            let currentIndex = array.length, randomIndex;
-            while (currentIndex !== 0) {
-                randomIndex = Math.floor(Math.random() * currentIndex);
-                currentIndex--;
-                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
-            }
-            return array;
-        }
-
-        // -------------------------------------------------------------
-        // リセット＆再スタート処理
-        // -------------------------------------------------------------
         function resetAndRestart(isShuffle = false) {
             if (isPlaying) stopAudio();
             
+            let baseQuestions = [...originalQuestions];
             if (isShuffle) {
-                questions = shuffleArray([...originalQuestions]);
-            } else {
-                questions = [...originalQuestions];
+                baseQuestions = shuffleArray(baseQuestions);
             }
+            questions = prepareQuestions(baseQuestions);
             
             currentQuestion = 0;
             score = 0;
             userAnswers = new Array(questions.length).fill(null);
             
-            // セレクトボックスの再構築
             questionSelector.innerHTML = '';
             questions.forEach((_, index) => {
                 const option = document.createElement('option');
@@ -876,9 +889,6 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // -------------------------------------------------------------
-        // シャッフル用モーダルのイベント制御
-        // -------------------------------------------------------------
         shuffleBtn.onclick = () => {
             shuffleModal.classList.remove('hidden');
         };
@@ -896,9 +906,6 @@
             resetAndRestart(true); 
         };
 
-        // -------------------------------------------------------------
-        // 初期化: セレクトボックス生成
-        // -------------------------------------------------------------
         questions.forEach((_, index) => {
             const option = document.createElement('option');
             option.value = index;
@@ -951,6 +958,7 @@
             }
         }
 
+        // --- STREAMING_CHUNK:Finalizing logic and event listeners... ---
         function selectOption(selectedIndex) {
             userAnswers[currentQuestion] = selectedIndex;
             if (selectedIndex === questions[currentQuestion].answer) {
