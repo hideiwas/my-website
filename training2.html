@@ -1,756 +1,932 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<title>ITIL 練習問題 1-40</title>
-<style>
-    body {
-        font-family: 'Helvetica Neue', Arial, sans-serif;
-        background-color: #f4f4f9;
-        margin: 0;
-        padding: 40px 20px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-    .s {
-        background: #fff;
-        width: 960px;
-        height: 540px;
-        position: relative;
-        margin-bottom: 40px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        overflow: hidden;
-        box-sizing: border-box;
-    }
-    .h {
-        background: #000;
-        height: 20px;
-        width: 100%;
-        position: absolute;
-        top: 0;
-        left: 0;
-    }
-    .n {
-        background: #e67e22;
-        color: #fff;
-        font-size: 28px;
-        font-weight: bold;
-        position: absolute;
-        top: 20px;
-        left: 0;
-        padding: 5px 25px;
-        z-index: 10;
-    }
-    .c {
-        position: absolute;
-        top: 80px;
-        left: 40px;
-        width: 650px;
-        font-size: 17px;
-        line-height: 1.6;
-        color: #111;
-    }
-    .q {
-        margin-bottom: 25px;
-    }
-    .o {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-    .o li {
-        margin-bottom: 12px;
-        display: flex;
-        align-items: flex-start;
-    }
-    .opt {
-        margin-right: 8px;
-        font-weight: normal;
-        white-space: nowrap;
-        padding: 2px 6px;
-    }
-    .o li.cor .opt {
-        border: 3px solid #d32f2f;
-        border-radius: 50%;
-        margin-left: -5px;
-        color: #111;
-        font-weight: bold;
-    }
-    .y { background: #fff200; padding: 0 2px; }
-    .b { background: #00ffff; padding: 0 2px; }
-    .r { color: #d32f2f; }
-    .br { border: 2px solid #d32f2f; padding: 1px 4px; display: inline-block; }
-    .sb {
-        position: absolute;
-        right: 30px;
-        top: 80px;
-        width: 220px;
-        font-size: 13px;
-    }
-    .exp {
-        background: #d2b4de;
-        padding: 10px;
-        margin-bottom: 10px;
-        color: #111;
-        line-height: 1.4;
-    }
-    .ann {
-        color: #d32f2f;
-        font-weight: bold;
-        margin-bottom: 10px;
-        font-size: 15px;
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ITIL 4 CDS 模擬試験 : 研修２ (完全版)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .slide-up { animation: slideUp 0.3s ease-out forwards; }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        * { -webkit-tap-highlight-color: transparent; }
+    </style>
 </head>
-<body>
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex items-center justify-center p-3 md:p-6">
 
-<!-- Slide 1 -->
-<div class="s">
-  <div class="h"></div><div class="n">1</div>
-  <div class="c">
-    <div class="q"><span class="y">新しいサービスを作成する</span>ためにバリューストリームを持つ組織があります。バリューストリームは顧客の要件から始まり、<span class="y">アプリケーションの展開（デプロイメント）の準備が整ったところで終わります。</span>顧客は<span class="y">サービス開始までの時間が長すぎる</span>と不満を表しています。<br>バリューストリームを改善するために最適な方法はどれですか？</div>
-    <ul class="o">
-      <li><span class="opt">A)</span> 各ステップで<span class="r">テストの量を減らし</span>、サービスの市場投入までの時間を短縮する</li>
-      <li><span class="opt">B)</span> バリューストリーム内に、顧客にサービスの<span class="r">稼働開始予定日を伝える</span>という活動を作成する</li>
-      <li><span class="opt">C)</span> バリュー・チェーンのステップとアクションを調べて、その<span class="r">期間の改善</span>を特定する</li>
-      <li class="cor"><span class="opt">D)</span> バリューストリームの範囲を拡張して、<span class="b">ユーザがサービスを利用できるようにするために必要なステップを含める</span></li>
-    </ul>
-  </div>
-</div>
+    <!-- シャッフル確認モーダル -->
+    <div id="shuffle-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden slide-up">
+            <div class="bg-amber-500 p-4 text-center">
+                <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center mx-auto text-amber-500 text-2xl font-bold mb-2">🔀</div>
+                <h3 class="text-white text-lg font-bold">ランダム出題を開始しますか？</h3>
+            </div>
+            <div class="p-6">
+                <p class="text-slate-600 text-sm mb-6 text-center leading-relaxed">
+                    現在の解答状況やスコアは<span class="font-bold text-rose-500">すべてリセット</span>され、第1問から新しい順番で再スタートします。
+                </p>
+                <div class="flex gap-3">
+                    <button id="cancel-shuffle-btn" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl transition">キャンセル</button>
+                    <button id="confirm-shuffle-btn" class="flex-1 bg-amber-500 hover:bg-amber-600 text-white font-bold py-2.5 rounded-xl transition shadow-lg shadow-amber-500/30">シャッフル開始</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<!-- Slide 2 -->
-<div class="s">
-  <div class="h"></div><div class="n">2</div>
-  <div class="c">
-    <div class="q">2つのチーム間の効果的な<span class="y">協働</span>に不可欠なものは何ですか？</div>
-    <ul class="o">
-      <li><span class="opt">A)</span> <span class="r">各チーム</span>が目標達成に向けてお互いのチームを助ける</li>
-      <li><span class="opt">B)</span> 両チームが<span class="r">情報を共有</span>し合うことで協力する</li>
-      <li class="cor"><span class="opt">C)</span> チーム間の高いレベルの<span class="b">信頼</span></li>
-      <li><span class="opt">D)</span> 両チームが協業をサポートするために適切な<span class="r">技術</span>を持つ</li>
-    </ul>
-  </div>
-</div>
+    <div id="app" class="bg-white rounded-2xl shadow-xl w-full max-w-4xl overflow-hidden border border-slate-200 flex flex-col">
+        <!-- Header -->
+        <div class="bg-indigo-700 text-white px-6 py-5 flex flex-col md:flex-row justify-between items-start md:items-center shadow-md gap-4">
+            <div>
+                <span class="text-xs font-semibold tracking-wider uppercase text-indigo-200 block">ITIL 4 Specialist</span>
+                <h1 class="text-lg md:text-xl font-bold">CDS 模擬試験 : 研修２</h1>
+            </div>
+            <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+                <div class="flex items-center gap-2 bg-indigo-800/80 px-3 py-1.5 rounded-lg border border-indigo-400/30">
+                    <span class="text-xs text-indigo-300 font-medium">ジャンプ:</span>
+                    <select id="question-jump" class="bg-transparent text-white text-sm font-bold focus:outline-none cursor-pointer">
+                        <!-- Options will be generated -->
+                    </select>
+                </div>
+                <span id="progress-text" class="text-sm font-semibold bg-indigo-800/80 px-3 py-1.5 rounded-lg border border-indigo-400/30 whitespace-nowrap"></span>
+                <button id="shuffle-btn" class="flex-1 md:flex-none bg-amber-500 hover:bg-amber-400 text-white text-sm font-bold py-1.5 px-3 rounded-lg shadow transition flex items-center justify-center gap-1 border border-amber-400">
+                    <span>🔀 ランダム</span>
+                </button>
+                <button id="play-audio-btn" class="flex-1 md:flex-none bg-emerald-500 hover:bg-emerald-400 text-white text-sm font-bold py-1.5 px-3 rounded-lg shadow transition flex items-center justify-center gap-1 border border-emerald-400">
+                    <span>▶️ 音声学習</span>
+                </button>
+                <button id="stop-audio-btn" class="hidden flex-1 md:flex-none bg-rose-500 hover:bg-rose-400 text-white text-sm font-bold py-1.5 px-3 rounded-lg shadow transition flex items-center justify-center gap-1 border border-rose-400">
+                    <span>⏹️ 停止</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Progress Bar -->
+        <div class="w-full bg-slate-200 h-2">
+            <div id="progress-bar" class="bg-emerald-500 h-2 transition-all duration-300"></div>
+        </div>
 
-<!-- Slide 3 -->
-<div class="s">
-  <div class="h"></div><div class="n">3</div>
-  <div class="c">
-    <div class="q"><span class="y">ワークフローの自動化</span>と、<span class="y">利害関係者への伝達</span>に使用される可能性が最も高いツールはどれですか？</div>
-    <ul class="o">
-      <li><span class="opt">A)</span> ロボティック・プロセス・オートメーション</li>
-      <li><span class="opt">B)</span> 継続的インテグレーションと継続的デリバリ/展開（デプロイメント）</li>
-      <li class="cor"><span class="opt">C)</span> 統合サービスマネジメント・ツールセット</li>
-      <li><span class="opt">D)</span> 報告と高度な分析</li>
-    </ul>
-  </div>
-  <div class="sb">
-    <div class="exp">自動化</div>
-    <div class="exp">自動化</div>
-    <div class="exp">自動化＆伝達</div>
-    <div class="exp">伝達</div>
-  </div>
-</div>
+        <!-- 音声再生中のステータス表示 -->
+        <div id="audio-status" class="hidden bg-emerald-50 text-emerald-800 text-sm font-bold px-4 py-2 border-b border-emerald-200 text-center animate-pulse">
+            🔊 現在、自動音声読み上げモードで再生中です...
+        </div>
 
-<!-- Slide 4 -->
-<div class="s">
-  <div class="h"></div><div class="n">4</div>
-  <div class="c">
-    <div class="q">組織が<span class="y">複数のサプライヤ</span>の活動を 1 つのバリューストリームで調整および結合できるのは、どのような概念ですか？</div>
-    <ul class="o">
-      <li class="cor"><span class="opt">A)</span> サービスの統合および管理</li>
-      <li><span class="opt">B)</span> インソーシング業務</li>
-      <li><span class="opt">C)</span> 商品化</li>
-      <li><span class="opt">D)</span> MoSCoW モデル</li>
-    </ul>
-  </div>
-</div>
+        <!-- Question Area -->
+        <div id="quiz-container" class="p-6 md:p-8 flex-1">
+            <div class="flex items-center gap-2 mb-3">
+                <span id="question-badge" class="bg-indigo-100 text-indigo-800 text-xs font-bold px-2.5 py-1 rounded">問題</span>
+            </div>
+            <h2 id="question-text" class="text-base md:text-lg font-semibold mb-6 leading-relaxed text-slate-900"></h2>
+            
+            <div id="options-container" class="space-y-3">
+                <!-- Options will be injected here -->
+            </div>
 
-<!-- Slide 5 -->
-<div class="s">
-  <div class="h"></div><div class="n">5</div>
-  <div class="c">
-    <div class="q">ある組織では、インシデントとサービス要求の<span class="y">チケットを作成するときの体験が</span><span class="br y">画一的</span>であるというフィードバックをユーザから受け取りました。<br>このフィードバック受けて、組織が実行できる改善のうち最適なのは次のどれですか？</div>
-    <ul class="o">
-      <li><span class="opt">A)</span> チケットの使用を共同の<span class="r">スウォーミング活動</span>に置き換えてチームワークを改善する</li>
-      <li class="cor"><span class="opt">B)</span> システムとレコードの<span class="br b">可視性を下げて</span>、直感的な初段階の体験を実現する</li>
-      <li><span class="opt">C)</span> <span class="r">優先順位付けレベルを見直して</span>、インシデントとサービス要求の解決にかかる時間を短縮する</li>
-      <li><span class="opt">D)</span> インシデントとサービス要求の<span class="r">チケットのフィールド数を増やして</span>、より多くの個人情報を収集する</li>
-    </ul>
-  </div>
-  <div class="sb">
-    <div class="ann">淡々と流れ作業的<br>見えにくくして</div>
-  </div>
-</div>
+            <!-- Enhanced Explanation Area -->
+            <div id="explanation-box" class="hidden mt-8 p-5 md:p-6 bg-slate-50 border-l-4 border-indigo-600 rounded-r-xl border border-slate-200 slide-up shadow-sm">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="bg-indigo-600 text-white text-xs font-bold px-2 py-0.5 rounded">シラバス準拠 解説</span>
+                </div>
+                <div id="explanation-content" class="text-sm leading-relaxed text-slate-700 space-y-3">
+                    <!-- Dynamic explanation blocks -->
+                </div>
+            </div>
 
-<!-- Slide 6 -->
-<div class="s">
-  <div class="h"></div><div class="n">6</div>
-  <div class="c">
-    <div class="q">ある組織は本社のある国から<span class="y">遠く離れた国に拠点を置く</span>ベンダを選択しました。<br>これはどの例ですか？</div>
-    <ul class="o">
-      <li class="cor"><span class="opt">A)</span> オフショアリング</li>
-      <li><span class="opt">B)</span> インソーシング</li>
-      <li><span class="opt">C)</span> ニアショアリング</li>
-      <li><span class="opt">D)</span> オンショアリング</li>
-    </ul>
-  </div>
-</div>
+            <!-- Navigation Buttons -->
+            <div class="mt-8 pt-5 border-t border-slate-200 flex flex-col-reverse sm:flex-row justify-between items-center gap-4">
+                <button id="prev-btn" class="hidden text-slate-500 hover:text-indigo-600 font-bold py-2 px-4 rounded transition flex items-center gap-2">
+                    <span class="text-xl leading-none">&larr;</span> 前の問題に戻る
+                </button>
+                <button id="next-btn" class="hidden w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-bold py-2.5 px-8 rounded-lg shadow transition duration-150 ml-auto">
+                    次の問題へ進む
+                </button>
+            </div>
+        </div>
+        
+        <!-- Result Screen -->
+        <div id="result-container" class="hidden p-8 md:p-12 text-center my-auto">
+            <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold">✓</div>
+            <h2 class="text-2xl md:text-3xl font-bold text-slate-900 mb-2">演習完了</h2>
+            <p class="text-slate-600 mb-6">すべての問題の回答と解説の確認が完了しました。</p>
+            <div class="bg-slate-50 p-6 rounded-xl max-w-xs mx-auto border border-slate-200 mb-8">
+                <div class="text-xs text-slate-500 font-medium uppercase tracking-wider mb-1">正答率</div>
+                <div class="text-4xl font-extrabold text-indigo-600"><span id="score"></span> <span id="total-score" class="text-xl text-slate-400 font-normal"></span></div>
+            </div>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <button onclick="location.reload()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-3 px-6 rounded-lg transition text-sm">最初からやり直す</button>
+                <button id="result-shuffle-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition text-sm flex items-center justify-center gap-2">
+                    🔀 ランダム順で再挑戦
+                </button>
+            </div>
+        </div>
+    </div>
 
-<!-- Slide 7 -->
-<div class="s">
-  <div class="h"></div><div class="n">7</div>
-  <div class="c">
-    <div class="q">ある組織は、新しいツールに対して利害関係者から提示された一連の要件をまとめたものを作成したいと考えています。各要件の重要性を判断するために、この組織は<span class="y">各要件を評価して優先順位を付けよう</span>としています。<br>これらの決定を下すときに組織を支援するのに最も役立つコンセプトまたはアプローチはどれですか？</div>
-    <ul class="o">
-      <li><span class="opt">A)</span> 作業をチケットとして管理する</li>
-      <li><span class="opt">B)</span> サービスの統合および管理</li>
-      <li><span class="opt">C)</span> 統合とデータ共有</li>
-      <li class="cor"><span class="opt">D)</span> MoSCoW</li>
-    </ul>
-  </div>
-  <div class="sb">
-    <div class="exp">MUST<br>SHOULD<br>COULD<br>WOULD (NOT)</div>
-  </div>
-</div>
+    <script>
+        const originalQuestions = [
+            {
+                question: "新しいサービスを作成するためにバリューストリームを持つ組織があります。バリューストリームは顧客の要件から始まり、アプリケーションの展開（デプロイメント）の準備が整ったところで終わります。顧客はサービス開始までの時間が長すぎると不満を表しています。\nバリューストリームを改善するために最適な方法はどれですか？",
+                options: [
+                    "各ステップでテストの量を減らし、サービスの市場投入までの時間を短縮する",
+                    "バリューストリーム内に、顧客にサービスの稼働開始予定日を伝えるという活動を作成する",
+                    "バリュー・チェーンのステップとアクションを調べて、その期間の改善を特定する",
+                    "バリューストリームの範囲を拡張して、ユーザがサービスを利用できるようにするために必要なステップを含める"
+                ],
+                answer: 3,
+                syllabus: "バリューストリームの設計原則",
+                rationale: "バリューストリームは「需要」から「価値」までをエンドツーエンドで網羅する必要があります。展開の準備ができた時点ではなく、ユーザが実際にサービスを利用し価値を実感できるステップまで範囲を拡張することが最適です。",
+                tips: "「価値の提供」まで含まれていないバリューストリームは不完全です。エンドツーエンドの範囲をカバーするように拡張します。"
+            },
+            {
+                question: "2つのチーム間の効果的な協働に不可欠なものは何ですか？",
+                options: [
+                    "各チームが目標達成に向けてお互いのチームを助ける",
+                    "両チームが情報を共有し合うことで協力する",
+                    "チーム間の高いレベルの信頼",
+                    "両チームが協業をサポートするために適切な技術を持つ"
+                ],
+                answer: 2,
+                syllabus: "原則と文化 - コラボレーション（協働）",
+                rationale: "効果的な協働（コラボレーション）には、お互いのチームに対する高いレベルの「信頼」と、共通の目標が必要不可欠です。",
+                tips: "協働（コラボレーション）を成功させる土台として最も重要なものは「信頼（Trust）」です。"
+            },
+            {
+                question: "ワークフローの自動化と、利害関係者への伝達に使用される可能性が最も高いツールはどれですか？",
+                options: [
+                    "ロボティック・プロセス・オートメーション",
+                    "継続的インテグレーションと継続的デリバリ/展開（デプロイメント）",
+                    "統合サービスマネジメント・ツールセット",
+                    "報告と高度な分析"
+                ],
+                answer: 2,
+                syllabus: "情報と技術 - コラボレーションツール",
+                rationale: "RPAやCI/CDは主に自動化のみに、報告ツールは伝達のみに偏りますが、「統合サービスマネジメント・ツールセット」はワークフローの自動化と利害関係者間の伝達（コミュニケーション）の両方を効果的に支援します。",
+                tips: "「自動化」と「伝達」の両方をカバーする統合ツールセットを選択します。"
+            },
+            {
+                question: "組織が複数のサプライヤの活動を 1 つのバリューストリームで調整および結合できるのは、どのような概念ですか？",
+                options: [
+                    "サービスの統合および管理",
+                    "インソーシング業務",
+                    "商品化",
+                    "MoSCoW モデル"
+                ],
+                answer: 0,
+                syllabus: "ソーシングとサプライヤ管理 - SIAM",
+                rationale: "サービスインテグレーションとマネジメント（SIAM）は、複数のサプライヤの活動を統合し、エンドツーエンドのサービスとして単一のバリューストリーム内で管理・調整する概念です。",
+                tips: "「複数サプライヤの統合と調整」といえば「SIAM（サービスの統合および管理）」です。"
+            },
+            {
+                question: "ある組織では、インシデントとサービス要求のチケットを作成するときの体験が画一的であるというフィードバックをユーザから受け取りました。\nこのフィードバック受けて、組織が実行できる改善のうち最適なのは次のどれですか？",
+                options: [
+                    "チケットの使用を共同のスウォーミング活動に置き換えてチームワークを改善する",
+                    "システムとレコードの可視性を下げて、直感的な初段階の体験を実現する",
+                    "優先順位付けレベルを見直して、インシデントとサービス要求の解決にかかる時間を短縮する",
+                    "インシデントとサービス要求のチケットのフィールド数を増やして、より多くの個人情報を収集する"
+                ],
+                answer: 1,
+                syllabus: "作業の優先順位付けと管理 - チケットとしての作業の管理",
+                rationale: "ユーザにとってチケット作成画面が複雑すぎたり、画一的で使いにくい場合、バックエンドの複雑なシステムやレコード項目をユーザから隠し（可視性を下げる）、直感的でシンプルなインターフェース（体験）を提供することが推奨されます。",
+                tips: "複雑な入力フォームなどをユーザに見えなくする（可視性を下げる）ことで、ユーザ体験を直感的に改善できます。"
+            },
+            {
+                question: "ある組織は本社のある国から遠く離れた国に拠点を置くベンダを選択しました。\nこれはどの例ですか？",
+                options: [
+                    "オフショアリング",
+                    "インソーシング",
+                    "ニアショアリング",
+                    "オンショアリング"
+                ],
+                answer: 0,
+                syllabus: "ソーシング・モデル",
+                rationale: "本社から遠く離れた海外の拠点（ベンダなど）を利用するソーシングモデルは「オフショアリング」と呼ばれます。",
+                tips: "遠く離れた国＝オフショア、近い隣国＝ニアショア、自国内＝オンショアです。"
+            },
+            {
+                question: "ある組織は、新しいツールに対して利害関係者から提示された一連の要件をまとめたものを作成したいと考えています。各要件の重要性を判断するために、この組織は各要件を評価して優先順位を付けようとしています。\nこれらの決定を下すときに組織を支援するのに最も役立つコンセプトまたはアプローチはどれですか？",
+                options: [
+                    "作業をチケットとして管理する",
+                    "サービスの統合および管理",
+                    "統合とデータ共有",
+                    "MoSCoW"
+                ],
+                answer: 3,
+                syllabus: "作業の優先順位付け",
+                rationale: "MoSCoWアプローチは、要件を MUST（必須）、SHOULD（すべき）、COULD（できれば）、WON'T（今回は見送る）に分類し、重要性を評価して優先順位を決定するための効果的な手法です。",
+                tips: "要件の優先順位付け（重要性の判断）には「MoSCoW」を使用します。"
+            },
+            {
+                question: "ある組織では、継続的改善管理表と、従業員のフィードバックを収集するための簡単なプロセスを確立しています。時間が経つにつれて、組織は従業員が改善の提案を躊躇していることに気付きました。\n従業員が躊躇する理由として、最も考えらえる点はどれですか？",
+                options: [
+                    "アイデア提出の手順が不明瞭である",
+                    "アイデア提出の褒賞システムの欠如",
+                    "従業員のアイデアが望ましいコスト削減につながっていない",
+                    "アイデアがどのようにレビューされ、それに基づいて行動されるかに関する透明性の欠如"
+                ],
+                answer: 3,
+                syllabus: "原則と文化 - フィードバックと透明性",
+                rationale: "当初は提案が行われていたのに徐々に減る主な理由は、自分のフィードバックがどのように扱われ、どんな行動につながったのかという透明性や「行動の呼びかけ（Call to action）」が欠如しており、従業員が「言っても無駄だ」と感じてしまうためです。",
+                tips: "フィードバックが無視される（透明性がない）と、従業員は次から提案しなくなります。"
+            },
+            {
+                question: "大規模な多国籍組織の IT チームが、バリューストリームを使用する業務の内容を文書化したいと考えています。\nIT チームが最初にすべきことは何ですか？",
+                options: [
+                    "バリューストリームを説明するときの適切なレベルの詳細と観点について合意を得る",
+                    "組織が現在使用しているすべてのプラクティスを特定する",
+                    "組織のガバナンス方針をチームに認識させる",
+                    "バリューストリームを文書化できるコンサルタントを見つけるために、提案依頼（RFP）活動を開始する"
+                ],
+                answer: 0,
+                syllabus: "バリューストリームの設計",
+                rationale: "バリューストリームを文書化（マッピング）する際、最初に行うべきことは「どの程度の粒度（詳細レベル）とスコープでマッピングを行うか」という観点について関係者間で合意することです。",
+                tips: "マッピングを始める前に、まずは「詳細のレベルと観点」について合意することが最初のステップです。"
+            },
+            {
+                question: "あるサービスデスク・チームでは、協働ツールを使用して対象分野の専門家(SME)と連携をとっています。このツールは、支援が必要になると関連する SME に通知します。その後、チームは対応している SME とリアルタイムに協働して、インシデントをより迅速に解決できます。\nこれは何の例だといえますか？",
+                options: [
+                    "スウォーミング",
+                    "シフトレフト",
+                    "ロボティック・プロセス・オートメーション",
+                    "継続的インテグレーション"
+                ],
+                answer: 0,
+                syllabus: "作業の優先順位付けと管理 - スウォーミング",
+                rationale: "関連する専門家（SME = Subject Matter Expert）がリアルタイムに集まり、協力してインシデントを迅速に解決する手法は「スウォーミング」と呼ばれます。",
+                tips: "専門家が「リアルタイムに協働」して解決にあたるアプローチはスウォーミングです。"
+            },
+            {
+                question: "組織が製品を社内で構築するよりも、サプライヤから購入することを選択する理由を、次の中から 2 つ選択してください。\n\n1. 製品を作成するための組織のプロセスが未成熟である\n2. 製品の作成に必要な作業が予測可能で反復的である\n3. 製品の作成は、組織のスタッフが有する知識に依存している\n4. 標準と方針へのコンプライアンスが不可欠である",
+                options: [
+                    "1 および 2",
+                    "2 および 3",
+                    "3 および 4",
+                    "1 および 4"
+                ],
+                answer: 0,
+                syllabus: "ソーシング戦略 - Build vs Buy",
+                rationale: "自社の構築プロセスが未成熟な場合（1）や、作業が予測可能で反復的でコモディティ化している場合（2）は、専門のサプライヤから購入（Buy）する方が効率的です。自社の知識に依存する場合（3）や厳密なコンプライアンスが不可欠な場合（4）は自社構築（Build）が適しています。",
+                tips: "「未成熟なプロセス」「予測可能で反復的」な作業は外部から購入（Buy）すべきです。"
+            },
+            {
+                question: "ユーザがチャットでインシデントを記録し、サービスデスクの窓口に電話がつながりました。窓口では、すでにユーザがチャットで回答したのと同じ質問をすべて尋ねました。この状況を回避するために、どのようなツールやテクニックが最もよく役立ちますか？",
+                options: [
+                    "マルチチャネル・コミュニケーション",
+                    "オムニチャネル・コミュニケーション",
+                    "シフトレフト",
+                    "サービスの共感"
+                ],
+                answer: 1,
+                syllabus: "情報と技術 - オムニチャネル",
+                rationale: "オムニチャネル・コミュニケーションは、複数のチャネル（チャット、電話、メールなど）間でコンテキストや履歴データをシームレスに共有し、ユーザに一貫した体験を提供する仕組みです。",
+                tips: "チャネルをまたいでも情報が引き継がれ、二度手間を防ぐ仕組みは「オムニチャネル」です。"
+            },
+            {
+                question: "ある組織では確立された手順を使用してサービスのサポートを管理しています。しかし、これらの確立された手順があることで、複雑なインシデントを解決するときに柔軟性を発揮できないという苦情がサポートスタッフから多く寄せられました。\nこの状況を改善するのに役立つアプローチはどれですか？",
+                options: [
+                    "機械学習",
+                    "シフトレフト",
+                    "アルゴリズム・タスク",
+                    "ヒューリスティック・タスク"
+                ],
+                answer: 3,
+                syllabus: "作業の管理 - ヒューリスティック",
+                rationale: "ヒューリスティック・タスクとは、厳密な手順（アルゴリズム）に従うのではなく、経験則や試行錯誤に基づいて柔軟に問題解決を図るアプローチです。複雑なインシデントの解決にはこのアプローチが有効です。",
+                tips: "厳密な手順（アルゴリズム）では対応できない複雑な問題には、柔軟な「ヒューリスティック」アプローチを使います。"
+            },
+            {
+                question: "スウォーミングの例はどれですか？",
+                options: [
+                    "2 次サポートのエンジニアには、エスカレーション前にインシデントを解決する期間が割り当てられる",
+                    "開発者のグループが集まり、特定のコーディングの問題を解決するのに最適な人を決定する",
+                    "ユーザのグループが、関連するインシデントについて同時にサービスデスクに連絡する",
+                    "複数のサポート・チームが別々のチケット列を介して作業するように割り当てられる"
+                ],
+                answer: 1,
+                syllabus: "作業の優先順位付けと管理 - スウォーミング",
+                rationale: "スウォーミングは、階層的なエスカレーションを避け、関係する専門家が一つに集まって（群がって）協力し、誰が問題解決に最適かを決定しながら対処する手法です。",
+                tips: "「グループが集まり協力して対応する」のがスウォーミングの典型例です。"
+            },
+            {
+                question: "コントロール、権限系統、または技術ドメインに基づいてリソースを配置する組織構造はどれですか？",
+                options: [
+                    "機能構造",
+                    "部門構造",
+                    "マトリックス構造",
+                    "フラット構造"
+                ],
+                answer: 0,
+                syllabus: "組織の構造",
+                rationale: "機能構造（機能型構造）は、組織の統制、権限、または技術ドメイン（例：ネットワークチーム、サーバチームなど専門領域）に基づいて階層的にリソースを配置する伝統的な構造です。",
+                tips: "「技術ドメイン」や「権限系統」に基づく専門領域別の配置は「機能構造」です。"
+            },
+            {
+                question: "ある組織では、バリューストリームを文書化することでコミュニケーションと協業を支援しています。\nバリューストリーム全体の例はどれですか？",
+                options: [
+                    "「データベースのアップグレード」は、新しいコンポーネントの展開（デプロイメント）（「設計と移行」活動）から始まり、データベースを IT 運用チームに渡すことで終わる",
+                    "「フィードバックの要求と処理」は、顧客への連絡（「エンゲージメント」活動）から始まり、フィードバックに対するアクションの実行（「改善」活動）で終わる",
+                    "「新しい機器の購入」は、購入資金の計画（「計画」活動）から始まり、機器の購入（「取得/構築」活動）で終わる",
+                    "「ユーザへの新しい電話のプロビジョニング」は、ユーザが新しい電話を要求することから始まり、電話のサプライヤおよびユーザへの価値創造で終わる"
+                ],
+                answer: 3,
+                syllabus: "バリューストリームの設計",
+                rationale: "バリューストリーム全体（完全なバリューストリーム）は、常に「需要の発生（要求）」から始まり、最終的な「価値の創造（提供）」で終わる一連のエンドツーエンドのフローでなければなりません。",
+                tips: "「需要（要求）から始まり、価値創造で終わる」シナリオだけが、真の完全なバリューストリームです。"
+            },
+            {
+                question: "サポート・チームがインシデントの修正を展開し、インシデントが解決されたかどうかを確認しています。\nバリューストリームのこのステップで、「サービスレベル管理」プラクティスによって行われたバリューストリームの貢献の例はどれですか？",
+                options: [
+                    "インシデントの影響を評価するための情報の提供",
+                    "達成されたサービスレベルが十分であるかを評価するための情報の提供",
+                    "インシデントの修正と復元に関する情報の提供",
+                    "サービスレベルの改善に向けた取り組みを評価するための情報の提供"
+                ],
+                answer: 1,
+                syllabus: "主要プラクティスの貢献 - サービスレベル管理",
+                rationale: "インシデント解決後の段階において、サービスレベル管理プラクティスは、そのインシデント対応がSLA等の目標に照らして十分であったか（サービスレベルが達成されたか）を評価するための情報を提供します。",
+                tips: "インシデント解決後に、その対応が「SLA基準を満たしていたか」を評価するのがサービスレベル管理の貢献です。"
+            },
+            {
+                question: "2次サポートのスタッフではなく、1次サポートのスタッフがインシデントの大部分を解決できるアプローチはどれですか？",
+                options: [
+                    "シフトレフト",
+                    "サービスの統合および管理",
+                    "従業員満足度の測定",
+                    "結果ベースの測定および報告"
+                ],
+                answer: 0,
+                syllabus: "バリューストリームにおけるプラクティス - シフトレフト",
+                rationale: "専門性の高い後方支援チーム（2次・3次）が行っていた作業や権限を、よりユーザに近い最前線（1次サポート）に移動させるアプローチを「シフトレフト」と呼びます。これによりエスカレーションが削減されます。",
+                tips: "後方（2次・3次）から前方（1次・ユーザ）へ作業を移動させるアプローチは「シフトレフト」です。"
+            },
+            {
+                question: "CI/CDの特徴はどれですか？",
+                options: [
+                    "線形的開発フレームワーク",
+                    "次のリリースまでに長時間かかる",
+                    "本番環境のコードの頻繁な変更",
+                    "リアクティブな戦術的な仕事"
+                ],
+                answer: 2,
+                syllabus: "情報と技術 - CI/CD",
+                rationale: "CI/CD（継続的インテグレーション/継続的デリバリー）は、アジャイルな手法を用いて、小さな変更を自動化されたパイプラインを通じて頻繁かつ安全に本番環境へ展開（変更）するためのプラクティスです。",
+                tips: "「小さく、頻繁に変更する」のがCI/CD最大の特徴です。"
+            },
+            {
+                question: "「デザイン思考」は、新しいサービスに対する最初のユーザ要件をどのように確立することを推奨していますか？",
+                options: [
+                    "ユーザが通常の作業を行うのを観察する",
+                    "ワークショップを開催し、ユーザに関連する質問をする",
+                    "実用的な試作品を作成し、ユーザがそれらにどのように反応するかを確認する",
+                    "新しいサービスで解決できる問題を定義するよう経営陣に依頼する"
+                ],
+                answer: 0,
+                syllabus: "情報と技術 - デザイン思考",
+                rationale: "デザイン思考の初期段階（共感）では、アンケートなどにとどまらず、ユーザが実際にどのように作業を行っているかを直接「観察する」ことで、隠れたニーズやペインポイントを発見することを推奨しています。",
+                tips: "デザイン思考の始まりは、まずユーザを深く理解するための「観察（共感）」からです。"
+            },
+            {
+                question: "ある組織がサービスのサポート品質を改善したいと考えています。この組織は、価値の創出に注力しない働き方が存在していることを認識しています。\n組織がやめるべき業務プラクティスの例はどれですか？",
+                options: [
+                    "顧客とサービスの可用性に関する要件や期待について話し合い、インシデントの優先度付けカテゴリを決定すること",
+                    "アンケートを実施して、セルフサービス ポータルのインタフェースの見た目への要望について、ユーザのフィードバックを収集すること",
+                    "計画された組織の再編成後に、サービス・サポート・モデルが目的に適しているかどうかを把握するために消費者とやり取りをすること",
+                    "組織のハードウェア・ベンダからの回答および修復にかかる時間を利用して、顧客のインシデント解決時間を促進すること"
+                ],
+                answer: 3,
+                syllabus: "アウトサイド・イン・アプローチ",
+                rationale: "ベンダの都合（SLAなど）をそのまま顧客への対応時間の基準として押し付けることは、顧客価値（アウトサイド・イン・アプローチ）に反する「内部志向」の悪い慣行であり、ストップ（やめる）べきです。",
+                tips: "「ベンダの都合を顧客に押し付ける」ようなアプローチは、真っ先に排除すべき悪習です。"
+            },
+            {
+                question: "サービスは多くの異なるサーバを使用することで、そのうちのいくつかに障害が発生しても動作を継続できます。1台のサーバに障害が発生しましたが、サービスへの影響はなく、技術者がサーバを通常の運用に復元するために作業しています。\n技術者は、自分が行っている作業をどのように文書化する必要がありますか？",
+                options: [
+                    "サーバに障害が発生し、復元する必要があるため、インシデントをログに記録する",
+                    "サーバを修正するために部品を変更する必要がある可能性があるため、変更をログに記録する",
+                    "サポート・チーム内のレコードを維持し、これらが中央のツールにログオンする必要性をなくす",
+                    "インシデントの原因が不明で調査する必要があるため、問題をログに記録する"
+                ],
+                answer: 0,
+                syllabus: "インシデント管理",
+                rationale: "冗長化によりユーザに影響が出ていない場合でも、構成アイテム（サーバ）の計画外の障害や機能低下は正式な「インシデント」として記録し、復旧作業をトラッキングする必要があります。",
+                tips: "ユーザへの影響がなくても、コンポーネントの障害は必ず「インシデント」として記録します。"
+            },
+            {
+                question: "ある組織は、解決したインシデントの数と、インシデントの解決にかかった平均時間によってサービスデスク・スタッフのパフォーマンスを測定します。\nサービスデスク・スタッフにとって、追加するのに最適な測定はどれですか？",
+                options: [
+                    "各スタッフ・メンバの月間平均労働時間数",
+                    "IT組織がインシデントの発生を検出するのに要した平均時間",
+                    "各スタッフ・メンバが記入したインシデント記録の品質",
+                    "サービスデスクが発行する満足度調査に回答したユーザの割合"
+                ],
+                answer: 2,
+                syllabus: "測定と報告",
+                rationale: "解決数や解決時間だけでは質の評価ができません。インシデント記録の品質（正確な情報の入力など）を測定することで、今後のトラブルシューティングや問題管理が効率化され、結果的に組織全体のパフォーマンス向上につながります。",
+                tips: "「数」や「時間」に加えて「品質（正確な記録）」を測定指標に加えることがベストプラクティスです。"
+            },
+            {
+                question: "「シフトレフト」アプローチの適用として当てはまるものはどれですか？",
+                options: [
+                    "テストを減らす機会を特定する",
+                    "欠陥検出タスクをライフサイクルの最後に移動する",
+                    "相互依存度の高いタスクを結合する",
+                    "必要なスキルと知識を減らす"
+                ],
+                answer: 2,
+                syllabus: "バリューストリームにおけるプラクティス - シフトレフト",
+                rationale: "シフトレフトは、後工程に回しがちなタスク（テストや品質チェックなど）をライフサイクルの前方に移動し、相互依存度の高いタスクと統合・結合してフローの効率化を図るアプローチを促進します。",
+                tips: "タスクを左（前方）にシフトし、関連タスクを結合することで効率を上げます。"
+            },
+            {
+                question: "ベンダが新しい建物に IT 機器を納入、調整、設置するときに、契約で定義された責任をベンダに果たしてもらいたいと考えている組織があります。これには、機器のステータスと関連文書が組織の構成マネジメントシステムに取り込まれていることを確認することも含まれます。\nベンダが責任を果たすのに最も役立つものは何ですか？",
+                options: [
+                    "展開（デプロイメント）モデル",
+                    "ロボティック・プロセス・オートメーション",
+                    "継続的インテグレーション",
+                    "MoSCoW 手法"
+                ],
+                answer: 0,
+                syllabus: "主要プラクティス - 展開管理",
+                rationale: "展開（デプロイメント）モデルを利用することで、機器の納入から設定、構成管理システムへの登録までの標準的な手順と責任分界点が明確になり、ベンダが確実に作業を実施できるようになります。",
+                tips: "機器の物理的な納入、設置、設定に関する標準手順は「展開（デプロイメント）モデル」で管理します。"
+            },
+            {
+                question: "ある組織では、一部のサービスがパブリック・クラウドに移動されたり、他のサービスが自動化されたパイプラインによって実装および変更されたりするなど、IT 環境に多くの変更が加えられています。この組織は、その「変更実現」プラクティスが新しいサービスに対してどのように機能するかを懸念しています。\n最適なアプローチはどれですか？",
+                options: [
+                    "変更を有効にするために一元化されたアプローチを採用し、すべての変更が同じ方法で評価および承認されるようにする",
+                    "各環境のチームが、使用している技術と現地のプラクティスに従って、変更を有効にする方法を決定できるようにする",
+                    "変更を有効にするアプローチが、さまざまな環境の種類によってどのように異なる必要があるかを検討する",
+                    "「変更の有効化」プラクティスの範囲を改正し、より多くの監視を必要とする自動化されていない変更に限定されるようにする"
+                ],
+                answer: 2,
+                syllabus: "主要プラクティス - 変更実現",
+                rationale: "クラウドや自動化パイプラインなど多様な環境が混在する場合、単一のプロセスを押し付けるのではなく、各環境の特性（種類）に応じた適切な変更実現アプローチ（柔軟な対応）を検討することが推奨されます。",
+                tips: "すべての変更を同じ方法で扱うのではなく、環境の種類に応じてアプローチを使い分けます。"
+            },
+            {
+                question: "ある組織が、パートナと協力して新しいサービスの概念実証を開発しています。概念実証により、組織は顧客から迅速にフィードバックを収集し、顧客の要件を検証できます。\nどの概念が適用されていますか？",
+                options: [
+                    "機械学習",
+                    "要員計画立案",
+                    "統合とデータ共有",
+                    "シフトレフト"
+                ],
+                answer: 3,
+                syllabus: "バリューストリームにおけるプラクティス - シフトレフト",
+                rationale: "本格的な開発に移行する前に、プロセスの早い段階（左側）で概念実証（PoC）を行い、顧客からのフィードバックを早期に得て要件を検証することは「シフトレフト」の強力な適用例です。",
+                tips: "早い段階で検証を行い、手戻りを防ぐ仕組みは「シフトレフト」の概念です。"
+            },
+            {
+                question: "ある組織が初めてバリューストリームを文書化しています。\nユーザに影響を与えるインシデントを解決するために、組織はどのようにバリューストリームをまとめる必要がありますか？",
+                options: [
+                    "インシデント検出から開始し、サービスの復旧までの手順を実行する",
+                    "モニタリング・ツールから開始し、インシデントが修正されるまで診断と復旧のために他のツールを通じて作業する",
+                    "サービスデスクプラクティスから開始し、ユーザが満足するまで他のサポート・チームを通じて作業する",
+                    "インシデント管理プラクティスの開始から開始し、インシデントが終了するまで活動を進める"
+                ],
+                answer: 0,
+                syllabus: "バリューストリームの設計",
+                rationale: "インシデント解決のバリューストリームは、「インシデントの検出（需要の発生）」から始まり、「通常のサービスへの復旧（価値の提供）」で終わるエンドツーエンドの手順としてまとめる必要があります。",
+                tips: "需要（インシデントの検出）から価値（サービスの復旧）までを通した手順を描くことが重要です。"
+            },
+            {
+                question: "あるサポート・チームでは、重み付けされた最短の作業から着手（WSJF: weighted shortest job first）を使用して、作業に優先順位を付けています。\n次に取り組むべきタスクはどれですか？",
+                options: [
+                    "タスク 1:遅延のコスト=1時間あたり£50、完了までの時間=1時間",
+                    "タスク 2:遅延のコスト=1時間あたり£50、完了までの時間=2時間",
+                    "タスク 3:遅延のコスト=1時間あたり£100、完了までの時間=1時間",
+                    "タスク 4:遅延のコスト=1時間あたり£100、完了までの時間=2時間"
+                ],
+                answer: 2,
+                syllabus: "作業の優先順位付けと管理 - WSJF",
+                rationale: "WSJFは「遅延コスト ÷ 完了までの時間」で計算し、値が最大のものを優先します。タスク1は50/1=50、タスク2は50/2=25、タスク3は100/1=100、タスク4は100/2=50となり、値が最も大きいタスク3が最優先されます。",
+                tips: "「遅延コスト」を「完了までの時間」で割り、一番数字が大きくなるものを選びます。"
+            },
+            {
+                question: "ある組織では、サービスを維持および改善するためのバリューストリームを開発し、「サービスの妥当性確認およびテスト」プラクティスの採用を計画しています。\n更新プログラムがサービスの信頼性に影響を与えないことが重要です。\n機能テストはすべてのテスト・フェーズに含まれる予定で、これらはすでに計画に追加されています。\nこの計画に欠けている「サービスの妥当性確認およびテスト」活動はどれですか？",
+                options: [
+                    "要件が完全に理解されるようにする",
+                    "機能以外のテスト中にソフトウェア開発アプローチを選択する",
+                    "受け入れテスト中にサービス消費者が使用とする新機能をテストする",
+                    "変更後もシステムが期待どおりに機能していることを確認する"
+                ],
+                answer: 0,
+                syllabus: "主要プラクティス - サービス妥当性確認とテスト",
+                rationale: "妥当性確認（Validation）の前提として、インプットとなる「要件（機能的・非機能的の両方）」が完全に理解されていることを保証するステップが不可欠です。",
+                tips: "テストや妥当性確認を行うための大前提は「要件が完全に理解されていること」の保証です。"
+            },
+            {
+                question: "ある組織には定年退職間近の従業員が多数います。この組織は、退職者によって失われる経験について懸念しています。\n1. 従業員の暗黙の知識を明示的な知識に変換する\n2. ベンダ・ソリューションがナレッジ文書として利用可能であることを確認する\n3. 従業員の明示的な知識を暗黙の知識に変換する\n4. 従業員の明示的な知識を組織内の他の従業員に伝達する\n\n共同化、表出化、連結化、内面化（SECI）モデルの観点から、\nこの組織が取るアプローチを次の中から2つ選択してください。",
+                options: [
+                    "1 および 2",
+                    "2 および 3",
+                    "3 および 4",
+                    "1 および 4"
+                ],
+                answer: 3,
+                syllabus: "情報と技術 - SECIモデル",
+                rationale: "退職者の頭の中にある経験（暗黙知）を文章化（明示的知識に変換）すること（表出化: 1）と、それを組織の他のメンバーに伝達・共有すること（連結化: 4）がSECIモデルに基づく適切なアプローチです。",
+                tips: "失われる知識を守るには、「暗黙知の明示化（表出化）」と「組織内での共有（連結化）」が必要です。"
+            },
+            {
+                question: "「問題管理」プラクティスがユーザ・サポートのバリューストリームにどのように貢献しているかを示す例はどれですか？",
+                options: [
+                    "現象を理解するための、主要リリース後のクローズ済みインシデントの詳細の分析",
+                    "ネットワーク・インシデントの原因が特定された後のナレッジ・レコードの更新",
+                    "顧客関係管理サービスに自動診断スクリプトを追加するという決定の影響の評価",
+                    "ビジネス・クリティカルなサービスの一部であるアプリケーションのエラーを修正するためのコードの作成"
+                ],
+                answer: 0,
+                syllabus: "主要プラクティスの貢献 - 問題管理",
+                rationale: "インシデントの傾向や潜在的な根本原因（問題）を特定するために、クローズ済みインシデントのデータをプロアクティブ（事前対応的）に分析することは問題管理プラクティスの重要な活動です。",
+                tips: "過去のインシデントデータを分析して根本原因を探る活動は「問題管理」の真骨頂です。"
+            },
+            {
+                question: "ある IT 部門では、サービス要求を満たすためのスタッフが限られています。スタッフを追加することはできず、組織は繁忙期に需要を管理する短期的なソリューションを実装したいと考えています。\n需要を管理するのに使用できる最適な手法はどれですか？",
+                options: [
+                    "新しいセルフサービス・ポータルを作成し、ユーザがサービス要求をログに記録および監視できるようにする",
+                    "午後 1 時以降に受信した要求は翌日まで処理されないことに同意する",
+                    "サービス要求に対して「ゴールド・サービス(VIP対応)」を提供するシニア・マネジメントの料金を引き上げる",
+                    "請負業者を雇用して、繁忙期に追加のサービス要求ワークロードを処理する"
+                ],
+                answer: 1,
+                syllabus: "作業の優先順位付けと管理",
+                rationale: "人員追加ができず短期的な対応が必要な場合、サービスレベル（対応時間など）を一時的に引き下げる（例：午後1時以降の要求は翌日回しにする）ことで需要とキャパシティのバランスを取る現実的な手法がとられます。",
+                tips: "リソースを増やせない状況では、サービスレベルの一時的な妥協で需要をコントロールします。"
+            },
+            {
+                question: "顧客とそのニーズに耳を傾け、認識することに焦点を当てているのはどれですか？",
+                options: [
+                    "ポジティブ・コミュニケーション",
+                    "シフトレフト",
+                    "情報モデル",
+                    "CI/CD"
+                ],
+                answer: 0,
+                syllabus: "原則と文化 - コミュニケーションの原則",
+                rationale: "ポジティブ・コミュニケーションは、アクティブ・リスニング（積極的傾聴）などを通じて相手のニーズや感情を深く理解し、良好な関係を築くことに焦点を当てます。",
+                tips: "「耳を傾け、認識する」＝ポジティブ・コミュニケーションです。"
+            },
+            {
+                question: "ある金融機関が新しいモバイル・アプリを開発していますが、必要な機能について同意できない利害関係者が多数います。\nこの状況に最も適した開発アプローチはどれですか？",
+                options: [
+                    "ウォーターフォール",
+                    "タイムボクシング",
+                    "線形反復",
+                    "並列実験"
+                ],
+                answer: 3,
+                syllabus: "情報と技術 - ソフトウェア開発アプローチ",
+                rationale: "要件が明確でない、あるいは関係者間で合意が取れていない場合、複数のアイデアを同時にプロトタイピングして検証する「並列実験」アプローチが適しています。",
+                tips: "合意が取れない（要件が曖昧な）場合は、複数のプロトタイプで試す「並列実験」が有効です。"
+            },
+            {
+                question: "優れたチーム・カルチャを作るのに役立つのはどれですか？",
+                options: [
+                    "チーム・ミーティングの回数を最小限に抑えて、専門分野における個人の生産性に注力する",
+                    "非公式チームを阻止し、共通の組織目標を確実に達成する",
+                    "チーム・メンバが、自分の役割と組織の目標にどのように適合するかを確実に理解する",
+                    "チーム・メンバの専門性の構築に注力し、部門横断的な役割に関する混乱を最小限に抑える"
+                ],
+                answer: 2,
+                syllabus: "原則と文化 - チーム文化",
+                rationale: "各メンバーが自分の作業の目的を理解し、それが組織全体の目標（大局）にどのように貢献しているか（適合するか）を理解させることが、優れたチーム文化の土台となります。",
+                tips: "「組織目標と個人の役割の適合（アラインメント）」が良い文化を形成します。"
+            },
+            {
+                question: "ある組織が、ユーザへの稼働中のサービスを復元するためのバリューストリームを設計しています。彼らはバリューストリームがユーザからの要求によって開始されることに同意し、サービスの復元までの手順を文書化しました。\n次にすべきことは何ですか？",
+                options: [
+                    "どのタイプのインシデントが 2 次サポートにエスカレートされるかについて同意する",
+                    "サービスを復元するために必要なプラクティスを特定する",
+                    "インシデント解決の要求を記述するユース・ケースを定義する",
+                    "バリューストリーム手順に関連するバリューチェーン活動を特定する"
+                ],
+                answer: 3,
+                syllabus: "バリューストリームの設計",
+                rationale: "手順（ステップ）を文書化した後は、その各ステップが ITILサービス・バリューチェーンのどの活動（エンゲージ、計画、提供とサポートなど）に対応するかを特定・マッピングします。",
+                tips: "手順の文書化の次は、それを「バリューチェーン活動」に関連付けます。"
+            },
+            {
+                question: "あるサービス・プロバイダが、クラウドベースのホスティング・サービスの新しいセットを外部ユーザに提供することを計画しています。サービス・プロバイダは、要員計画立案戦略を策定中で、すでに次の項目を特定しています。\n● ホスティング・サービスに必要な新しい技術\n● 必要なリーダシップと組織変更\n戦略には他にどのような考慮事項を含める必要がありますか？",
+                options: [
+                    "ホスティング・サービスに必要なインフラストラクチャ・コンポーネントを設計し、潜在的なサプライヤを特定する",
+                    "新しいスタッフ体制を計画し、ホスティング・サービスの知識と経験を持つマネージャを任命する",
+                    "クラウド・サービスの潜在的なユーザのスキルと知識を特定し、トレーニング・セッションを計画する",
+                    "新しいスタッフを採用するため、そのスタッフに必要なスキルと知識のセットなどの役割プロファイルを作成する"
+                ],
+                answer: 3,
+                syllabus: "要員計画立案",
+                rationale: "要員計画（ワークフォースプランニング）においては、新しいサービスを提供するために組織内で必要となる具体的なスキル、コンピテンシー、および役割プロファイルを作成し特定することが重要です。",
+                tips: "「要員計画立案」では、必要なスキルの特定や「役割プロファイルの作成」を含みます。"
+            },
+            {
+                question: "反復的で大量かつ、単純な意思決定ルールに基づくプロセスの自動化を支援するのはどのコンセプトですか？",
+                options: [
+                    "CI/CD",
+                    "統合とデータ共有",
+                    "ロボティック・プロセス・オートメーション",
+                    "結果ベースの測定および報告"
+                ],
+                answer: 2,
+                syllabus: "情報と技術 - RPA",
+                rationale: "ロボティック・プロセス・オートメーション（RPA）は、反復的でルールベースの大量なトランザクションタスクを自動化するために設計された技術です。",
+                tips: "「反復的、大量、ルールベース」の自動化といえばRPAです。"
+            },
+            {
+                question: "情報モデルはどのようにして組織に価値を提供しますか？",
+                options: [
+                    "反復的で日常的なタスクを自動化する",
+                    "組織によるデータの作成方法と使用方法に関する共通の理解を構築する",
+                    "組織内の指揮命令系統を減らす",
+                    "組織がスタッフのニーズをどの程度満たしているかを理解する"
+                ],
+                answer: 1,
+                syllabus: "情報と技術 - 情報モデル",
+                rationale: "情報モデルは、組織内で情報やデータがどのように定義され、作成され、管理され、関連付けられるかの共通の枠組み（共通の理解）を提供し、部門間のサイロ化を防ぐ価値があります。",
+                tips: "情報モデルは「データ作成と使用に関する共通の理解の構築」を提供します。"
+            }
+        ];
 
-<!-- Slide 8 -->
-<div class="s">
-  <div class="h"></div><div class="n">8</div>
-  <div class="c">
-    <div class="q">ある組織では、継続的改善管理表と、従業員のフィードバックを収集するための簡単なプロセスを確立しています。<span class="br y">時間が経つにつれて</span>、組織は従業員が<span class="y">改善の提案を躊躇している</span>ことに気付きました。<br>従業員が躊躇する理由として、最も考えらえる点はどれですか？</div>
-    <ul class="o">
-      <li><span class="opt">A)</span> アイデア<span class="r">提出の手順が不明瞭</span>である</li>
-      <li><span class="opt">B)</span> アイデア<span class="r">提出の褒賞システム</span>の欠如</li>
-      <li><span class="opt">C)</span> 従業員のアイデアが望ましい<span class="r">コスト削減につながっていない</span></li>
-      <li class="cor"><span class="opt">D)</span> アイデアがどのようにレビューされ、それに基づいて行動されるかに関する<span class="b">透明性の欠如</span></li>
-    </ul>
-  </div>
-  <div class="sb">
-    <div class="ann">当初は提案していたが・・・</div>
-  </div>
-</div>
+        let questions = [...originalQuestions];
+        let currentQuestion = 0;
+        let score = 0;
+        let userAnswers = new Array(questions.length).fill(null);
+        let shuffledOptionIndices = [];
+        
+        let isPlaying = false;
+        let utterance = new SpeechSynthesisUtterance();
+        utterance.lang = 'ja-JP';
 
-<!-- Slide 9 -->
-<div class="s">
-  <div class="h"></div><div class="n">9</div>
-  <div class="c">
-    <div class="q">大規模な多国籍組織の IT チームが、<span class="y">バリューストリームを使用する業務の内容を文書化</span>したいと考えています。<br>IT チームが<span class="y">最初</span>にすべきことは何ですか？</div>
-    <ul class="o">
-      <li class="cor"><span class="opt">A)</span> バリューストリームを説明するときの<span class="b">適切なレベルの詳細と観点について合意</span>を得る</li>
-      <li><span class="opt">B)</span> 組織が現在<span class="r">使用しているすべてのプラクティスを特定</span>する</li>
-      <li><span class="opt">C)</span> 組織の<span class="r">ガバナンス方針</span>をチームに認識させる</li>
-      <li><span class="opt">D)</span> バリューストリームを文書化できる<span class="r">コンサルタントを見つけるために、提案依頼（RFP）</span>活動を開始する</li>
-    </ul>
-  </div>
-</div>
+        const qText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const expBox = document.getElementById('explanation-box');
+        const expContent = document.getElementById('explanation-content');
+        const nextBtn = document.getElementById('next-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const progText = document.getElementById('progress-text');
+        const progBar = document.getElementById('progress-bar');
+        const quizContainer = document.getElementById('quiz-container');
+        const resultContainer = document.getElementById('result-container');
+        const qBadge = document.getElementById('question-badge');
+        
+        const playBtn = document.getElementById('play-audio-btn');
+        const stopBtn = document.getElementById('stop-audio-btn');
+        const audioStatus = document.getElementById('audio-status');
+        const jumpSelect = document.getElementById('question-jump');
+        
+        const shuffleBtn = document.getElementById('shuffle-btn');
+        const shuffleModal = document.getElementById('shuffle-modal');
+        const cancelShuffleBtn = document.getElementById('cancel-shuffle-btn');
+        const confirmShuffleBtn = document.getElementById('confirm-shuffle-btn');
+        const resultShuffleBtn = document.getElementById('result-shuffle-btn');
 
-<!-- Slide 10 -->
-<div class="s">
-  <div class="h"></div><div class="n">10</div>
-  <div class="c">
-    <div class="q">あるサービスデスク・チームでは、<span class="y">協働ツール</span>を使用して対象分野の専門家(<span class="br">SME</span>)と連携をとっています。このツールは、<span class="y">支援が必要になると関連する SME に通知します。</span>その後、チームは対応している <span class="y">SME とリアルタイムに協働して</span>、インシデントをより迅速に解決できます。<br>これは何の例だといえますか？</div>
-    <ul class="o">
-      <li class="cor"><span class="opt">A)</span> スワーミング</li>
-      <li><span class="opt">B)</span> シフトレフト</li>
-      <li><span class="opt">C)</span> ロボティック・プロセス・オートメーション</li>
-      <li><span class="opt">D)</span> 継続的インテグレーション</li>
-    </ul>
-  </div>
-  <div class="sb">
-    <div class="ann">Subject Matter Expert (SME)</div>
-  </div>
-</div>
+        // Fisher-Yates Shuffle
+        function shuffleArray(array) {
+            const arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
 
-<!-- Slide 11 -->
-<div class="s">
-  <div class="h"></div><div class="n">11</div>
-  <div class="c">
-    <div class="q">組織が製品を社内で構築するよりも、<span class="y">サプライヤから購入することを選択する理由</span>を、次の中から 2 つ選択してください。<br><br>1. 製品を作成するための<span class="b">組織のプロセスが未成熟</span>である<br>2. 製品の作成に必要な作業が<span class="b">予測可能で反復的</span>である<br>3. 製品の作成は、<span class="r">組織のスタッフが有する知識に依存して</span>いる<br>4. 標準と方針への<span class="r">コンプライアンスが不可欠</span>である</div>
-    <ul class="o">
-      <li class="cor"><span class="opt">A)</span> 1 および 2</li>
-      <li><span class="opt">B)</span> 2 および 3</li>
-      <li><span class="opt">C)</span> 3 および 4</li>
-      <li><span class="opt">D)</span> 1 および 4</li>
-    </ul>
-  </div>
-</div>
+        function prepareQuestions() {
+            shuffledOptionIndices = [];
+            for(let i=0; i<questions.length; i++) {
+                const indices = [0, 1, 2, 3];
+                const shuffled = shuffleArray(indices);
+                shuffledOptionIndices.push(shuffled);
+            }
+        }
 
-<!-- Slide 12 -->
-<div class="s">
-  <div class="h"></div><div class="n">12</div>
-  <div class="c">
-    <div class="q">ユーザがチャットでインシデントを記録し、サービスデスクの窓口に電話がつながりました。窓口では、<span class="y">すでにユーザがチャットで回答したのと同じ質問をすべて尋ねました。この状況を回避するために</span>、どのようなツールやテクニックが最もよく役立ちますか？</div>
-    <ul class="o">
-      <li><span class="opt">A)</span> マルチチャネル・コミュニケーション</li>
-      <li class="cor"><span class="opt">B)</span> オムニチャネル・コミュニケーション</li>
-      <li><span class="opt">C)</span> シフトレフト</li>
-      <li><span class="opt">D)</span> サービスの共感</li>
-    </ul>
-  </div>
-</div>
+        function initJumpMenu() {
+            jumpSelect.innerHTML = '';
+            for (let i = 0; i < questions.length; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.text = `問 ${i + 1}`;
+                option.className = 'text-slate-800';
+                jumpSelect.appendChild(option);
+            }
+            jumpSelect.addEventListener('change', (e) => {
+                if (isPlaying) stopAudio();
+                currentQuestion = parseInt(e.target.value);
+                loadQuestion();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
 
-<!-- Slide 13 -->
-<div class="s">
-  <div class="h"></div><div class="n">13</div>
-  <div class="c">
-    <div class="q">ある組織では<span class="y">確立された手順</span>を使用してサービスのサポートを管理しています。しかし、これらの確立された手順があることで、複雑なインシデントを解決するときに<span class="y">柔軟性を発揮できない</span>という苦情がサポートスタッフから多く寄せられました。<br>この状況を改善するのに役立つアプローチはどれですか？</div>
-    <ul class="o">
-      <li><span class="opt">A)</span> 機械学習</li>
-      <li><span class="opt">B)</span> シフトレフト</li>
-      <li><span class="opt">C)</span> アルゴリズム・タスク</li>
-      <li class="cor"><span class="opt">D)</span> ヒューリスティック・タスク</li>
-    </ul>
-  </div>
-</div>
+        function loadQuestion() {
+            const q = questions[currentQuestion];
+            qBadge.innerText = `問 ${currentQuestion + 1} / ${questions.length}`;
+            qText.innerHTML = q.question.replace(/\n/g, '<br>');
+            
+            progText.innerText = `${currentQuestion + 1} / ${questions.length}`;
+            progBar.style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
+            jumpSelect.value = currentQuestion;
 
-<!-- Slide 14 -->
-<div class="s">
-  <div class="h"></div><div class="n">14</div>
-  <div class="c">
-    <div class="q">スワーミングの例はどれですか？</div>
-    <ul class="o">
-      <li><span class="opt">A)</span> 2 次サポートのエンジニアには、エスカレーション前にインシデントを<span class="r">解決する期間が割り当てられる</span></li>
-      <li class="cor"><span class="opt">B)</span> <span class="b">開発者のグループが集まり</span>、特定のコーディングの問題を解決するのに最適な人を決定する</li>
-      <li><span class="opt">C)</span> ユーザのグループが、関連するインシデントについて<span class="r">同時にサービスデスクに連絡</span>する</li>
-      <li><span class="opt">D)</span> 複数のサポート・チームが<span class="r">別々のチケット列を介して作業する</span>ように割り当てられる</li>
-    </ul>
-  </div>
-</div>
+            if (currentQuestion === 0) {
+                prevBtn.classList.add('hidden');
+            } else {
+                prevBtn.classList.remove('hidden');
+            }
 
-<!-- Slide 15 -->
-<div class="s">
-  <div class="h"></div><div class="n">15</div>
-  <div class="c">
-    <div class="q">コントロール、権限系統、または技術ドメインに基づいてリソースを配置する組織構造はどれですか？</div>
-    <ul class="o">
-      <li class="cor"><span class="opt">A)</span> 機能構造</li>
-      <li><span class="opt">B)</span> 部門構造</li>
-      <li><span class="opt">C)</span> マトリックス構造</li>
-      <li><span class="opt">D)</span> フラット構造</li>
-    </ul>
-  </div>
-</div>
+            if (userAnswers[currentQuestion] !== null) {
+                showAnswerState(userAnswers[currentQuestion]);
+            } else {
+                optionsContainer.innerHTML = '';
+                expBox.classList.add('hidden');
+                nextBtn.classList.add('hidden'); 
 
-<!-- Slide 16 -->
-<div class="s">
-  <div class="h"></div><div class="n">16</div>
-  <div class="c">
-    <div class="q">ある組織では、バリューストリームを文書化することでコミュニケーションと協業を支援しています。<br><span class="y">バリューストリーム全体の例</span>はどれですか？</div>
-    <ul class="o">
-      <li><span class="opt">A)</span> 「データベースのアップグレード」は、新しいコンポーネントの<span class="r">展開</span>（デプロイメント）（「設計と移行」活動）から始まり、データベースを<span class="r"> IT 運用チームに渡す</span>ことで終わる</li>
-      <li><span class="opt">B)</span> 「フィードバックの要求と処理」は、<span class="r">顧客への連絡</span>（「エンゲージメント」活動）から始まり、フィードバックに対するアクションの実行（<span class="r">「改善」</span>活動）で終わる</li>
-      <li><span class="opt">C)</span> 「新しい機器の購入」は、<span class="r">購入資金の計画</span>（「計画」活動）から始まり、機器の購入（<span class="r">「取得/構築」</span>活動）で終わる</li>
-      <li class="cor"><span class="opt">D)</span> 「ユーザへの新しい電話のプロビジョニング」は、<span class="b">ユーザ</span>が新しい電話を要求することから始まり、電話のサプライヤおよび<span class="b">ユーザへの価値創造</span>で終わる</li>
-    </ul>
-  </div>
-</div>
+                const currentShuffledIndices = shuffledOptionIndices[currentQuestion];
 
-<!-- Slide 17 -->
-<div class="s">
-  <div class="h"></div><div class="n">17</div>
-  <div class="c">
-    <div class="q">サポート・チームがインシデントの修正を展開し、<span class="y">インシデントが解決されたかどうかを確認</span>しています。<br>バリューストリームのこのステップで、<span class="y">「サービスレベル管理」プラクティス</span>によって行われたバリューストリームの貢献の例はどれですか？</div>
-    <ul class="o">
-      <li><span class="opt">A)</span> インシデントの<span class="r">影響を評価する</span>ための情報の提供</li>
-      <li class="cor"><span class="opt">B)</span> 達成された<span class="b">サービスレベルが十分であるかを評価する</span>ための情報の提供</li>
-      <li><span class="opt">C)</span> インシデントの<span class="r">修正と復元</span>に関する情報の提供</li>
-      <li><span class="opt">D)</span> サービスレベルの<span class="r">改善に向けた取り組みを評価</span>するための情報の提供</li>
-    </ul>
-  </div>
-</div>
+                currentShuffledIndices.forEach((originalIndex, displayIndex) => {
+                    const opt = q.options[originalIndex];
+                    const btn = document.createElement('button');
+                    btn.className = 'w-full text-left p-4 rounded-xl border-2 border-slate-200 hover:border-indigo-400 focus:outline-none transition-all duration-150 bg-white font-medium text-slate-700 shadow-sm hover:bg-slate-50 flex items-start gap-3';
+                    btn.innerHTML = `<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-slate-100 text-slate-600 text-xs font-bold shrink-0 mt-0.5">${String.fromCharCode(65 + displayIndex)}</span> <span>${opt}</span>`;
+                    btn.onclick = () => {
+                        if (isPlaying) stopAudio();
+                        selectOption(originalIndex, btn);
+                    };
+                    optionsContainer.appendChild(btn);
+                });
+            }
+        }
 
-<!-- Slide 18 -->
-<div class="s">
-  <div class="h"></div><div class="n">18</div>
-  <div class="c">
-    <div class="q">2次サポートのスタッフではなく、<span class="br y">1次サポートのスタッフが</span><span class="y">インシデントの大部分を解決</span>できるアプローチはどれですか？</div>
-    <ul class="o">
-      <li class="cor"><span class="opt">A)</span> シフトレフト</li>
-      <li><span class="opt">B)</span> サービスの統合および管理</li>
-      <li><span class="opt">C)</span> 従業員満足度の測定</li>
-      <li><span class="opt">D)</span> 結果ベースの測定および報告</li>
-    </ul>
-  </div>
-  <div class="sb">
-    <div class="ann">2次や3次の後ろへのエスカレーションが減る、ということ</div>
-  </div>
-</div>
+        function selectOption(originalIndex) {
+            userAnswers[currentQuestion] = originalIndex;
+            if (originalIndex === questions[currentQuestion].answer) {
+                score++;
+            }
+            showAnswerState(originalIndex);
+        }
 
-<!-- Slide 19 -->
-<div class="s">
-  <div class="h"></div><div class="n">19</div>
-  <div class="c">
-    <div class="q">CI/CDの特徴はどれですか？</div>
-    <ul class="o">
-      <li><span class="opt">A)</span> 線形的開発フレームワーク</li>
-      <li><span class="opt">B)</span> 次のリリースまでに長時間かかる</li>
-      <li class="cor"><span class="opt">C)</span> 本番環境のコードの頻繁な変更</li>
-      <li><span class="opt">D)</span> リアクティブな戦術的な仕事</li>
-    </ul>
-  </div>
-</div>
+        function showAnswerState(selectedIndex) {
+            const q = questions[currentQuestion];
+            optionsContainer.innerHTML = '';
+            
+            const currentShuffledIndices = shuffledOptionIndices[currentQuestion];
 
-<!-- Slide 20 -->
-<div class="s">
-  <div class="h"></div><div class="n">20</div>
-  <div class="c">
-    <div class="q">「デザイン思考」は、新しいサービスに対する<span class="y">最初のユーザ要件をどのように確立する</span>ことを推奨していますか？</div>
-    <ul class="o">
-      <li class="cor"><span class="opt">A)</span> ユーザが通常の作業を行うのを<span class="b">観察する</span></li>
-      <li><span class="opt">B)</span> ワークショップを開催し、ユーザに関連する<span class="r">質問をする</span></li>
-      <li><span class="opt">C)</span> 実用的な<span class="r">試作品</span>を作成し、ユーザがそれらにどのように反応するかを確認する</li>
-      <li><span class="opt">D)</span> 新しいサービスで解決できる<span class="r">問題を定義する</span>よう<span class="r">経営陣</span>に依頼する</li>
-    </ul>
-  </div>
-</div>
+            currentShuffledIndices.forEach((originalIndex, displayIndex) => {
+                const opt = q.options[originalIndex];
+                const btn = document.createElement('button');
+                btn.className = 'w-full text-left p-4 rounded-xl border-2 transition-all duration-150 font-medium flex items-start gap-3';
+                btn.innerHTML = `<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-slate-100 text-slate-600 text-xs font-bold shrink-0 mt-0.5">${String.fromCharCode(65 + displayIndex)}</span> <span>${opt}</span>`;
+                btn.disabled = true; 
+                
+                if (originalIndex === q.answer) {
+                    btn.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-900', 'ring-2', 'ring-emerald-200');
+                } else if (originalIndex === selectedIndex && originalIndex !== q.answer) {
+                    btn.classList.add('border-rose-500', 'bg-rose-50', 'text-rose-900');
+                } else {
+                    btn.classList.add('border-slate-200', 'text-slate-700', 'opacity-60');
+                }
+                optionsContainer.appendChild(btn);
+            });
 
-<!-- Slide 21 -->
-<div class="s">
-  <div class="h"></div><div class="n">21</div>
-  <div class="c">
-    <div class="q">ある組織がサービスのサポート品質を改善したいと考えています。この組織は、<span class="y">価値の創出に注力しない働き方</span>が存在していることを認識しています。<br>組織が<span class="y">やめるべき業務プラクティス</span>の例はどれですか？</div>
-    <ul class="o">
-      <li><span class="opt">A)</span> <span class="r">顧客と</span>サービスの可用性に関する要件や期待について話し合い、<span class="r">インシデントの優先度付けカテゴリ</span>を決定すること</li>
-      <li><span class="opt">B)</span> アンケートを実施して、セルフサービス ポータルのインタフェースの見た目への要望について、<span class="r">ユーザのフィードバックを収集する</span>こと</li>
-      <li><span class="opt">C)</span> 計画された組織の再編成後に、サービス・サポート・モデルが<span class="r">目的に適しているか</span>どうかを把握するために<span class="r">消費者とやり取りをする</span>こと</li>
-      <li class="cor"><span class="opt">D)</span> 組織の<span class="b">ハードウェア・ベンダからの回答および修復にかかる時間</span>を利用して、顧客のインシデント解決時間を促進すること</li>
-    </ul>
-  </div>
-</div>
+            expContent.innerHTML = `
+                <div class="bg-indigo-50/80 p-3 rounded-lg border border-indigo-100 text-indigo-900 text-xs font-medium">
+                    <span class="font-bold">📘 対象シラバス：</span> ${q.syllabus}
+                </div>
+                <div>
+                    <h4 class="font-bold text-slate-900 text-sm mb-1">【正解の根拠と背景】</h4>
+                    <p>${q.rationale}</p>
+                </div>
+                <div class="bg-amber-50 p-3 rounded-lg border border-amber-200 text-amber-900 text-xs">
+                    <span class="font-bold text-amber-800">💡 試験対策・着眼点：</span> ${q.tips}
+                </div>
+            `;
+            expBox.classList.remove('hidden');
+            
+            nextBtn.classList.remove('hidden');
+            if (currentQuestion === questions.length - 1) {
+                nextBtn.innerText = "結果を見る";
+            } else {
+                nextBtn.innerText = "次の問題へ進む";
+            }
 
-<!-- Slide 22 -->
-<div class="s">
-  <div class="h"></div><div class="n">22</div>
-  <div class="c">
-    <div class="q">サービスは多くの異なるサーバを使用することで、そのうちのいくつかに障害が発生しても動作を継続できます。1台のサーバに障害が発生しましたが、サービスへの影響はなく、技術者がサーバを通常の運用に復元するために作業しています。<br>技術者は、<span class="y">自分が行っている作業をどのように文書化する</span>必要がありますか？</div>
-    <ul class="o">
-      <li class="cor"><span class="opt">A)</span> サーバに障害が発生し、復元する必要があるため、<span class="b">インシデント</span>をログに記録する</li>
-      <li><span class="opt">B)</span> サーバを修正するために部品を変更する必要がある可能性があるため、<span class="r">変更</span>をログに記録する</li>
-      <li><span class="opt">C)</span> サポート・チーム内のレコードを維持し、これらが<span class="r">中央のツールにログオンする必要性をなくす</span></li>
-      <li><span class="opt">D)</span> インシデントの原因が不明で調査する必要があるため、<span class="r">問題</span>をログに記録する</li>
-    </ul>
-  </div>
-  <div class="sb">
-    <div class="exp">正解。</div>
-    <div class="exp">変更の可能性があるだけ。変更するなら、別途RFCを起票すべき。</div>
-    <div class="exp">「情報共有をしない」という意味なので✖</div>
-    <div class="exp">「今の作業」については、まずはインシデントレコードにログを記録すべき。そのうえで原因を調査したいなら、問題レコードを起票（記録）する。</div>
-  </div>
-</div>
+            if(!isPlaying) {
+                setTimeout(() => {
+                    expBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 80);
+            }
+        }
 
-<!-- Slide 23 -->
-<div class="s">
-  <div class="h"></div><div class="n">23</div>
-  <div class="c">
-    <div class="q">ある組織は、<span class="y">解決したインシデントの数</span>と、<span class="y">インシデントの解決にかかった平均時間</span>によってサービスデスク・スタッフのパフォーマンスを測定します。<br>サービスデスク・スタッフにとって、追加するのに最適な測定はどれですか？</div>
-    <ul class="o">
-      <li><span class="opt">A)</span> 各スタッフ・メンバの月間平均労働時間数</li>
-      <li><span class="opt">B)</span> IT組織がインシデントの発生を検出するのに要した平均時間</li>
-      <li class="cor"><span class="opt">C)</span> 各スタッフ・メンバが記入したインシデント記録の品質</li>
-      <li><span class="opt">D)</span> サービスデスクが発行する満足度調査に回答したユーザの割合</li>
-    </ul>
-  </div>
-  <div class="sb">
-    <div class="exp">サービス志向（顧客価値）になっていないので✖</div>
-    <div class="exp">「サービスデスク」ではなく「IT組織」となっており、サービスデスク・スタッフだけではなくなる。</div>
-    <div class="exp">正解。インシデント記録の品質が高いと、次回の解決が速くなる。</div>
-    <div class="exp">「サービスデスク・スタッフのパフォーマンス」を測定するための項目としては直接的ではないので✖</div>
-  </div>
-</div>
+        nextBtn.onclick = () => {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                quizContainer.classList.add('hidden');
+                resultContainer.classList.remove('hidden');
+                document.getElementById('score').innerText = score;
+                document.getElementById('total-score').innerText = `/ ${questions.length}`;
+            }
+        };
 
-<!-- Slide 24 -->
-<div class="s">
-  <div class="h"></div><div class="n">24</div>
-  <div class="c">
-    <div class="q">「シフトレフト」アプローチの適用として当てはまるものはどれですか？</div>
-    <ul class="o">
-      <li><span class="opt">A)</span> テストを減らす機会を特定する</li>
-      <li><span class="opt">B)</span> 欠陥検出タスクをライフサイクルの最後に移動する</li>
-      <li class="cor"><span class="opt">C)</span> 相互依存度の高いタスクを結合する</li>
-      <li><span class="opt">D)</span> 必要なスキルと知識を減らす</li>
-    </ul>
-  </div>
-</div>
+        prevBtn.onclick = () => {
+            if (currentQuestion > 0) {
+                if (isPlaying) stopAudio();
+                currentQuestion--;
+                loadQuestion();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        };
 
-<!-- Slide 25 -->
-<div class="s">
-  <div class="h"></div><div class="n">25</div>
-  <div class="c">
-    <div class="q">ベンダが新しい建物に IT 機器を納入、調整、設置するときに、契約で定義された責任をベンダに果たしてもらいたいと考えている組織があります。これには、<span class="br">機器のステータスと関連文書が組織の構成マネジメントシステムに取り込まれていることを確認することも含まれます。</span><br>ベンダが責任を果たすのに最も役立つものは何ですか？</div>
-    <ul class="o">
-      <li class="cor"><span class="opt">A)</span> 展開（デプロイメント）モデル</li>
-      <li><span class="opt">B)</span> ロボティック・プロセス・オートメーション</li>
-      <li><span class="opt">C)</span> 継続的インテグレーション</li>
-      <li><span class="opt">D)</span> MoSCoW 手法</li>
-    </ul>
-  </div>
-  <div class="sb">
-    <div class="ann">「機器を納入する際に、ステータス情報や関連文書の情報をツールに確実に登録してほしい。」という意味。</div>
-  </div>
-</div>
+        // 音声自動再生
+        playBtn.onclick = () => {
+            if (isPlaying) return;
+            isPlaying = true;
+            playBtn.classList.add('hidden');
+            stopBtn.classList.remove('hidden');
+            audioStatus.classList.remove('hidden');
+            
+            if (userAnswers[currentQuestion] === null) {
+                 selectOption(questions[currentQuestion].answer); 
+            }
+            readCurrentQuestion();
+        };
 
-<!-- Slide 26 -->
-<div class="s">
-  <div class="h"></div><div class="n">26</div>
-  <div class="c">
-    <div class="q">ある組織では、一部のサービスがパブリック・クラウドに移動されたり、他のサービスが自動化されたパイプラインによって実装および変更されたりするなど、<span class="y">IT 環境に多くの変更が加えられています。</span>この組織は、<span class="br">その</span>「変更実現」プラクティスが新しいサービスに対してどのように機能するかを懸念しています。<br>最適なアプローチはどれですか？</div>
-    <ul class="o">
-      <li><span class="opt">A)</span> 変更を有効にするために一元化されたアプローチを採用し、<span class="r">すべての変更が同じ方法</span>で評価および承認されるようにする</li>
-      <li><span class="opt">B)</span> <span class="r">各環境のチームが</span>、使用している技術と現地のプラクティスに従って、変更を有効にする方法を<span class="r">決定できるようにする</span></li>
-      <li class="cor"><span class="opt">C)</span> 変更を有効にするアプローチが、さまざまな<span class="b">環境の種類によって</span>どのように異なる必要があるかを<span class="b">検討する</span></li>
-      <li><span class="opt">D)</span> 「変更の有効化」プラクティスの範囲を改正し、<span class="r">より多くの監視を必要とする自動化されていない変更に限定</span>されるようにする</li>
-    </ul>
-  </div>
-  <div class="sb">
-    <div class="ann">“The”の誤訳。無視して良い。</div>
-  </div>
-</div>
+        stopBtn.onclick = stopAudio;
 
-<!-- Slide 27 -->
-<div class="s">
-  <div class="h"></div><div class="n">27</div>
-  <div class="c">
-    <div class="q">ある組織が、パートナと協力して新しいサービスの概念実証を開発しています。概念実証により、組織は顧客から<span class="y">迅速にフィードバックを収集し、顧客の要件を検証できます</span>。<br>どの概念が適用されていますか？</div>
-    <ul class="o">
-      <li><span class="opt">A)</span> 機械学習</li>
-      <li><span class="opt">B)</span> 要員計画立案</li>
-      <li><span class="opt">C)</span> 統合とデータ共有</li>
-      <li class="cor"><span class="opt">D)</span> シフトレフト</li>
-    </ul>
-  </div>
-</div>
+        function stopAudio() {
+            isPlaying = false;
+            window.speechSynthesis.cancel();
+            stopBtn.classList.add('hidden');
+            playBtn.classList.remove('hidden');
+            audioStatus.classList.add('hidden');
+        }
 
-<!-- Slide 28 -->
-<div class="s">
-  <div class="h"></div><div class="n">28</div>
-  <div class="c">
-    <div class="q">ある組織が初めてバリューストリームを文書化しています。<br><span class="y">ユーザに影響を与えるインシデントを解決するために</span>、組織はどのようにバリューストリームをまとめる必要がありますか？</div>
-    <ul class="o">
-      <li class="cor"><span class="opt">A)</span> <span class="b">インシデント検出から</span>開始し、<span class="b">サービスの復旧まで</span>の手順を実行する</li>
-      <li><span class="opt">B)</span> モニタリング・ツールから開始し、インシデントが修正されるまで診断と復旧のために<span class="r">他のツールを通じて作業</span>する</li>
-      <li><span class="opt">C)</span> サービスデスクプラクティスから開始し、ユーザが満足するまで<span class="r">他のサポート・チームを通じて</span>作業する</li>
-      <li><span class="opt">D)</span> <span class="r">インシデント管理プラクティスの開始</span>から開始し、<span class="r">インシデントが終了する</span>まで活動を進める</li>
-    </ul>
-  </div>
-</div>
+        function readCurrentQuestion() {
+            if (!isPlaying) return;
+            window.speechSynthesis.cancel();
+            const q = questions[currentQuestion];
+            let textToRead = `第${currentQuestion + 1}問。問題。。。${q.question}。。。。`;
+            textToRead += `正解は。。。${q.options[q.answer].replace(/\(.*?\)/g, '')}。。。。`;
+            textToRead += `解説。。。${q.rationale}。。。。`;
+            textToRead += `試験対策のポイント。。。${q.tips}`;
+            
+            utterance.text = textToRead;
+            
+            utterance.onend = () => {
+                if (isPlaying) {
+                    if (currentQuestion < questions.length - 1) {
+                        currentQuestion++;
+                        loadQuestion();
+                        if (userAnswers[currentQuestion] === null) {
+                             selectOption(questions[currentQuestion].answer); 
+                        }
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                        setTimeout(readCurrentQuestion, 1500); 
+                    } else {
+                        stopAudio();
+                        alert("すべての問題の読み上げが完了しました。お疲れ様でした！");
+                    }
+                }
+            };
+            
+            utterance.onerror = (e) => {
+                console.error("音声読み上げエラー", e);
+                if(isPlaying) stopAudio();
+            };
+            
+            window.speechSynthesis.speak(utterance);
+        }
 
-<!-- Slide 29 -->
-<div class="s">
-  <div class="h"></div><div class="n">29</div>
-  <div class="c">
-    <div class="q">あるサポート・チームでは、<span class="y">重み付けされた最短の作業から着手</span>（WSJF: weighted shortest job first）を使用して、作業に優先順位を付けています。<br>次に取り組むべきタスクはどれですか？</div>
-    <ul class="o">
-      <li><span class="opt">A)</span> タスク 1:遅延のコスト=1時間あたり£50、完了までの時間=1時間</li>
-      <li><span class="opt">B)</span> タスク 2:遅延のコスト=1時間あたり£50、完了までの時間=2時間</li>
-      <li class="cor"><span class="opt">C)</span> タスク 3:遅延のコスト=1時間あたり£100、完了までの時間=1時間</li>
-      <li><span class="opt">D)</span> タスク 4:遅延のコスト=1時間あたり£100、完了までの時間=2時間</li>
-    </ul>
-  </div>
-</div>
+        // シャッフル機能
+        shuffleBtn.onclick = () => {
+            if (isPlaying) stopAudio();
+            shuffleModal.classList.remove('hidden');
+        };
+        
+        cancelShuffleBtn.onclick = () => {
+            shuffleModal.classList.add('hidden');
+        };
 
-<!-- Slide 30 -->
-<div class="s">
-  <div class="h"></div><div class="n">30</div>
-  <div class="c">
-    <div class="q">ある組織では、サービスを維持および改善するためのバリューストリームを開発し、「サービスの<span class="br y">妥当性確認</span>および<span class="y">テスト</span>」プラクティスの採用を計画しています。<br>更新プログラムがサービスの信頼性に影響を与えないことが重要です。<br><span class="br y">機能テスト</span>はすべてのテスト・フェーズに含まれる予定で、これらはすでに計画に追加されています。<br>この計画に欠けている「サービスの妥当性確認およびテスト」活動はどれですか？</div>
-    <ul class="o">
-      <li class="cor"><span class="opt">A)</span> <span class="b">要件が完全に理解</span>されるようにする</li>
-      <li><span class="opt">B)</span> <span class="r">機能以外のテスト中にソフトウェア開発アプローチを</span>選択する</li>
-      <li><span class="opt">C)</span> <span class="r">受け入れテスト中にサービス消費者が使用とする新機能をテスト</span>する</li>
-      <li><span class="opt">D)</span> 変更後もシステムが期待どおりに<span class="r">機能していることを確認</span>する</li>
-    </ul>
-  </div>
-  <div class="sb">
-    <div class="ann">[質問の予測] こっちか？！ 非機能（保証）のテストか？！</div>
-    <div class="exp">正解。要件は、妥当性確認のインプット。機能＋非機能の両方。</div>
-    <div class="exp">ソフトウェア開発アプローチは機能テストで使う。</div>
-    <div class="exp">機能テストなので、既に予定に含まれている内容。</div>
-    <div class="exp">「機能していることの確認」というのは機能テストのことなので、既に予定に含まれている内容。</div>
-  </div>
-</div>
+        function executeShuffle() {
+            questions = shuffleArray([...originalQuestions]);
+            currentQuestion = 0;
+            score = 0;
+            userAnswers = new Array(questions.length).fill(null);
+            
+            prepareQuestions();
+            initJumpMenu();
+            loadQuestion();
+            
+            shuffleModal.classList.add('hidden');
+            resultContainer.classList.add('hidden');
+            quizContainer.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        confirmShuffleBtn.onclick = executeShuffle;
+        resultShuffleBtn.onclick = executeShuffle;
 
-<!-- Slide 31 -->
-<div class="s">
-  <div class="h"></div><div class="n">31</div>
-  <div class="c">
-    <div class="q">ある組織には定年退職間近の従業員が多数います。この組織は、退職者によって<span class="y">失われる経験について懸念</span>しています。<br>1. 従業員の暗黙の知識を明示的な知識に変換する<br>2. ベンダ・ソリューションがナレッジ文書として利用可能であることを確認する<br>3. 従業員の明示的な知識を暗黙の知識に変換する<br>4. 従業員の明示的な知識を組織内の他の従業員に伝達する<br><br>共同化、表出化、連結化、内面化<span class="y">（SECI）モデルの観点から</span>、<br>この組織が取るアプローチを次の中から2つ選択してください。</div>
-    <ul class="o">
-      <li><span class="opt">A)</span> 1 および 2</li>
-      <li><span class="opt">B)</span> 2 および 3</li>
-      <li><span class="opt">C)</span> 3 および 4</li>
-      <li class="cor"><span class="opt">D)</span> 1 および 4</li>
-    </ul>
-  </div>
-  <div class="sb">
-    <div class="exp">1. 表出化</div>
-    <div class="exp">2. 退職者と無関係</div>
-    <div class="exp">3. ✖ 退化?!</div>
-    <div class="exp">4. 連結化</div>
-  </div>
-</div>
-
-<!-- Slide 32 -->
-<div class="s">
-  <div class="h"></div><div class="n">32</div>
-  <div class="c">
-    <div class="q"><span class="y">「問題管理」</span>プラクティスがユーザ・サポートのバリューストリームにどのように貢献しているかを示す例はどれですか？</div>
-    <ul class="o">
-      <li class="cor"><span class="opt">A)</span> 現象を理解するための、主要リリース後のクローズ済みインシデントの詳細の分析</li>
-      <li><span class="opt">B)</span> ネットワーク・インシデントの原因が特定された後のナレッジ・レコードの更新</li>
-      <li><span class="opt">C)</span> <span class="br">顧客関係管理サービス</span>に自動診断スクリプトを追加するという決定の影響の評価</li>
-      <li><span class="opt">D)</span> ビジネス・クリティカルなサービスの一部であるアプリケーションのエラーを修正するためのコードの作成</li>
-    </ul>
-  </div>
-  <div class="sb">
-    <div class="ann">Cの赤枠: CRM</div>
-    <div class="exp">正解。</div>
-    <div class="exp">ナレッジ管理</div>
-    <div class="exp">(解説には「サービスレベル管理」とあるが)変更実現</div>
-    <div class="exp">開発作業なので、「ソフトウェア開発および管理」プラクティスが参考になる。</div>
-  </div>
-</div>
-
-<!-- Slide 33 -->
-<div class="s">
-  <div class="h"></div><div class="n">33</div>
-  <div class="c">
-    <div class="q">ある IT 部門では、<span class="br y">サービス要求を満たす</span>ための<span class="br y">スタッフが限られています</span>。スタッフを追加することはできず、組織は<span class="y">繁忙期に需要を管理する短期的なソリューション</span>を実装したいと考えています。<br>需要を管理するのに使用できる最適な手法はどれですか？</div>
-    <ul class="o">
-      <li><span class="opt">A)</span> 新しい<span class="r">セルフサービス・ポータル</span>を作成し、ユーザがサービス要求をログに記録および監視できるようにする</li>
-      <li class="cor"><span class="opt">B)</span> 午後 1 時以降に受信した要求は<span class="r">翌日まで処理されない</span>ことに同意する</li>
-      <li><span class="opt">C)</span> サービス要求に対して「ゴールド・サービス(VIP対応)」を提供する<span class="br">シニア・マネジメント</span>の<span class="r">料金を引き上げる</span></li>
-      <li><span class="opt">D)</span> <span class="r">請負業者を雇用</span>して、繁忙期に追加のサービス要求ワークロードを処理する</li>
-    </ul>
-  </div>
-  <div class="sb">
-    <div class="ann">要求管理、サービスデスクの人数不足、上級管理職・役員</div>
-    <div class="exp">ポータルを作成するのは短期的には実現しづらいので✖</div>
-    <div class="exp">仕方ないがこれが正解。</div>
-    <div class="exp">これをするとVIPからの需要(サービス要求)は減るが、むしろ優先度を上げるべきなので✖</div>
-    <div class="exp">問題文の「スタッフを追加できない」という条件に反するので✖</div>
-  </div>
-</div>
-
-<!-- Slide 34 -->
-<div class="s">
-  <div class="h"></div><div class="n">34</div>
-  <div class="c">
-    <div class="q">顧客とそのニーズに<span class="y">耳を傾け</span>、認識することに焦点を当てているのはどれですか？</div>
-    <ul class="o">
-      <li class="cor"><span class="opt">A)</span> ポジティブ・コミュニケーション</li>
-      <li><span class="opt">B)</span> シフトレフト</li>
-      <li><span class="opt">C)</span> 情報モデル</li>
-      <li><span class="opt">D)</span> CI/CD</li>
-    </ul>
-  </div>
-  <div class="sb">
-    <div class="exp">傾聴</div>
-  </div>
-</div>
-
-<!-- Slide 35 -->
-<div class="s">
-  <div class="h"></div><div class="n">35</div>
-  <div class="c">
-    <div class="q">ある金融機関が新しいモバイル・アプリを開発していますが、<span class="y">必要な機能について同意できない利害関係者が多数います</span>。<br>この状況に最も適した開発アプローチはどれですか？</div>
-    <ul class="o">
-      <li><span class="opt">A)</span> ウォーターフォール</li>
-      <li><span class="opt">B)</span> タイムボクシング</li>
-      <li><span class="opt">C)</span> 線形反復</li>
-      <li class="cor"><span class="opt">D)</span> 並列実験</li>
-    </ul>
-  </div>
-</div>
-
-<!-- Slide 36 -->
-<div class="s">
-  <div class="h"></div><div class="n">36</div>
-  <div class="c">
-    <div class="q"><span class="y">優れたチーム・カルチャを作る</span>のに役立つのはどれですか？</div>
-    <ul class="o">
-      <li><span class="opt">A)</span> チーム・ミーティングの回数を最小限に抑えて、専門分野における<span class="r">個人の生産性に注力</span>する</li>
-      <li><span class="opt">B)</span> <span class="r">非公式チームを阻止</span>し、共通の組織目標を確実に達成する</li>
-      <li class="cor"><span class="opt">C)</span> チーム・メンバが、<span class="b">自分の役割と組織の目標にどのように適合するか</span>を確実に理解する</li>
-      <li><span class="opt">D)</span> チーム・メンバの専門性の構築に注力し、<span class="r">部門横断的な役割に関する混乱を最小限に抑える</span></li>
-    </ul>
-  </div>
-  <div class="sb">
-    <div class="exp">部門横断的な活動が無くなり、サイロ化が進むリスクが上がる（部門間の壁ができる）</div>
-  </div>
-</div>
-
-<!-- Slide 37 -->
-<div class="s">
-  <div class="h"></div><div class="n">37</div>
-  <div class="c">
-    <div class="q">ある組織が、ユーザへの稼働中のサービスを復元するためのバリューストリームを設計しています。彼らはバリューストリームがユーザからの要求によって<span class="y">開始されることに同意</span>し、サービスの復元までの<span class="y">手順を文書化</span>しました。<br>次にすべきことは何ですか？</div>
-    <ul class="o">
-      <li><span class="opt">A)</span> どのタイプのインシデントが 2 次サポートに<span class="r">エスカレートされるか</span>について同意する</li>
-      <li><span class="opt">B)</span> サービスを復元するために必要な<span class="r">プラクティスを特定</span>する</li>
-      <li><span class="opt">C)</span> インシデント解決の<span class="r">要求を記述するユース・ケース</span>を定義する</li>
-      <li class="cor"><span class="opt">D)</span> バリューストリーム手順に<span class="b">関連するバリューチェーン活動を特定</span>する</li>
-    </ul>
-  </div>
-  <div class="sb">
-    <div class="ann">PDFのp.148</div>
-  </div>
-</div>
-
-<!-- Slide 38 -->
-<div class="s">
-  <div class="h"></div><div class="n">38</div>
-  <div class="c">
-    <div class="q">あるサービス・プロバイダが、クラウドベースのホスティング・サービスの新しいセットを外部ユーザに提供することを計画しています。サービス・プロバイダは、<span class="y">要員計画立案戦略</span>を策定中で、すでに次の項目を特定しています。<br>● ホスティング・サービスに必要な<span class="y">新しい技術</span><br>● <span class="y">必要なリーダシップと組織変更</span><br>戦略には他にどのような考慮事項を含める必要がありますか？</div>
-    <ul class="o">
-      <li><span class="opt">A)</span> ホスティング・サービスに必要な<span class="r">インフラストラクチャ・コンポーネントを設計</span>し、<span class="r">潜在的なサプライヤを特定する</span></li>
-      <li><span class="opt">B)</span> <span class="r">新しいスタッフ体制</span>を計画し、ホスティング・サービスの知識と経験を持つ<span class="r">マネージャを任命</span>する</li>
-      <li><span class="opt">C)</span> クラウド・サービスの潜在的な<span class="r">ユーザ</span>のスキルと知識を特定し、トレーニング・セッションを計画する</li>
-      <li class="cor"><span class="opt">D)</span> <span class="r">新しいスタッフを採用する</span>ため、そのスタッフに必要なスキルと知識のセットなどの<span class="r">役割プロファイルを作成する</span></li>
-    </ul>
-  </div>
-  <div class="sb">
-    <div class="exp">技術は特定済み。アウトソーシングの検討は要員計画の範囲外。</div>
-    <div class="exp">「必要なリーダシップと組織変更」は特定済み。</div>
-    <div class="exp">「ユーザ」ではなく「サービスプロバイダのメンバー」が対象範囲。</div>
-    <div class="exp">正解。</div>
-  </div>
-</div>
-
-<!-- Slide 39 -->
-<div class="s">
-  <div class="h"></div><div class="n">39</div>
-  <div class="c">
-    <div class="q"><span class="y">反復的で大量かつ、単純</span>な意思決定ルールに基づくプロセスの<span class="y">自動化</span>を支援するのはどのコンセプトですか？</div>
-    <ul class="o">
-      <li><span class="opt">A)</span> CI/CD</li>
-      <li><span class="opt">B)</span> 統合とデータ共有</li>
-      <li class="cor"><span class="opt">C)</span> ロボティック・プロセス・オートメーション</li>
-      <li><span class="opt">D)</span> 結果ベースの測定および報告</li>
-    </ul>
-  </div>
-</div>
-
-<!-- Slide 40 -->
-<div class="s">
-  <div class="h"></div><div class="n">40</div>
-  <div class="c">
-    <div class="q"><span class="y">情報モデル</span>はどのようにして組織に価値を提供しますか？</div>
-    <ul class="o">
-      <li><span class="opt">A)</span> 反復的で日常的なタスクを自動化する</li>
-      <li class="cor"><span class="opt">B)</span> 組織によるデータの作成方法と使用方法に関する共通の理解を構築する</li>
-      <li><span class="opt">C)</span> 組織内の指揮命令系統を減らす</li>
-      <li><span class="opt">D)</span> 組織がスタッフのニーズをどの程度満たしているかを理解する</li>
-    </ul>
-  </div>
-  <div class="sb">
-    <div class="exp">RPA</div>
-    <div class="exp">正解。以下のような要素を含む。<br>・組織内の主要な事実、用語、活動、プラクティスの定義<br>・組織の技術サービスとビジネス・サービスの主要なコンポーネントと、コンポーネント間の関係を構造的に表したもの</div>
-    <div class="exp">フラットな組織</div>
-    <div class="exp">従業員満足度管理</div>
-  </div>
-</div>
-
+        // 初期化処理
+        prepareQuestions();
+        initJumpMenu();
+        loadQuestion();
+    </script>
 </body>
 </html>
