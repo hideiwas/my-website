@@ -1,0 +1,58 @@
+<style>
+  .tag {
+    display: inline-block;
+    background-color: #e2e8f0;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin: 2px;
+    font-size: 12px;
+  }
+  .toggle-btn {
+    color: #3182ce;
+    cursor: pointer;
+    font-size: 12px;
+    text-decoration: underline;
+    margin-left: 4px;
+  }
+  .hidden-items {
+    display: none; /* 初期状態では隠す */
+  }
+</style>
+
+<table border="1" cellpadding="8" style="border-collapse: collapse;">
+  <tr>
+    <th>ユーザー名</th>
+    <th>保有権限（JSON配列）</th>
+  </tr>
+  <tr>
+    <td>田中太郎</td>
+    <td>
+      <!-- 最初の2件だけデフォルトで表示 -->
+      <span class="tag">管理者</span>
+      <span class="tag">編集者</span>
+      
+      <!-- 隠しエリア（3件目以降） -->
+      <span class="hidden-items" id="items-1">
+        <span class="tag">投稿者</span>
+        <span class="tag">閲覧者</span>
+        <span class="tag">ゲスト</span>
+      </span>
+      
+      <!-- 切り替えボタン -->
+      <span class="toggle-btn" onclick="toggleInline('items-1', this)">+3件もっと見る</span>
+    </td>
+  </tr>
+</table>
+
+<script>
+  function toggleInline(targetId, btnElement) {
+    const target = document.getElementById(targetId);
+    if (target.style.display === 'none' || target.style.display === '') {
+      target.style.display = 'inline';
+      btnElement.innerText = '閉じる';
+    } else {
+      target.style.display = 'none';
+      btnElement.innerText = '+3件もっと見る';
+    }
+  }
+</script>
