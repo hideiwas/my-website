@@ -1,58 +1,57 @@
 <style>
-  .tag {
-    display: inline-block;
-    background-color: #e2e8f0;
-    padding: 2px 8px;
-    border-radius: 4px;
-    margin: 2px;
-    font-size: 12px;
-  }
-  .toggle-btn {
-    color: #3182ce;
+  .expand-btn {
     cursor: pointer;
-    font-size: 12px;
-    text-decoration: underline;
-    margin-left: 4px;
+    background: #edf2f7;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 4px;
   }
-  .hidden-items {
+  .detail-row {
     display: none; /* 初期状態では隠す */
+    background-color: #f7fafc;
+  }
+  .json-list {
+    margin: 0;
+    padding-left: 20px;
+    font-size: 14px;
   }
 </style>
 
-<table border="1" cellpadding="8" style="border-collapse: collapse;">
+<table border="1" cellpadding="8" style="border-collapse: collapse; width: 100%;">
   <tr>
     <th>ユーザー名</th>
-    <th>保有権限（JSON配列）</th>
+    <th>最終ログイン</th>
+    <th>操作ログ（JSON配列）</th>
   </tr>
+  <!-- メインの行 -->
   <tr>
-    <td>田中太郎</td>
+    <td>鈴木一郎</td>
+    <td>2026-09-02</td>
     <td>
-      <!-- 最初の2件だけデフォルトで表示 -->
-      <span class="tag">管理者</span>
-      <span class="tag">編集者</span>
-      
-      <!-- 隠しエリア（3件目以降） -->
-      <span class="hidden-items" id="items-1">
-        <span class="tag">投稿者</span>
-        <span class="tag">閲覧者</span>
-        <span class="tag">ゲスト</span>
-      </span>
-      
-      <!-- 切り替えボタン -->
-      <span class="toggle-btn" onclick="toggleInline('items-1', this)">+3件もっと見る</span>
+      <button class="expand-btn" onclick="toggleRow('detail-1', this)">▼ ログ詳細を開く</button>
+    </td>
+  </tr>
+  <!-- 展開される詳細行（最初は非表示） -->
+  <tr class="detail-row" id="detail-1">
+    <td colspan="3"> <!-- colspanで列を結合して横幅を確保 -->
+      <ul class="json-list">
+        <li><strong>2026-09-01:</strong> ログイン</li>
+        <li><strong>2026-09-02:</strong> 設定変更</li>
+        <li><strong>2026-09-02:</strong> パスワード再発行</li>
+      </ul>
     </td>
   </tr>
 </table>
 
 <script>
-  function toggleInline(targetId, btnElement) {
-    const target = document.getElementById(targetId);
-    if (target.style.display === 'none' || target.style.display === '') {
-      target.style.display = 'inline';
-      btnElement.innerText = '閉じる';
+  function toggleRow(rowId, btnElement) {
+    const row = document.getElementById(rowId);
+    if (row.style.display === 'none' || row.style.display === '') {
+      row.style.display = 'table-row';
+      btnElement.innerText = '▲ 閉じる';
     } else {
-      target.style.display = 'none';
-      btnElement.innerText = '+3件もっと見る';
+      row.style.display = 'none';
+      btnElement.innerText = '▼ ログ詳細を開く';
     }
   }
 </script>
